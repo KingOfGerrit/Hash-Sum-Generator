@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace Hash_Sum_Generator
 {
@@ -14,6 +15,11 @@ namespace Hash_Sum_Generator
         public AboutWindow()
         {
             InitializeComponent();
+        }
+
+        private void AboutWindow_Load(object sender, EventArgs e)
+        {
+            label2.Text = "Version: " + Convert.ToString(Assembly.GetExecutingAssembly().GetName().Version);
         }
     }
 }

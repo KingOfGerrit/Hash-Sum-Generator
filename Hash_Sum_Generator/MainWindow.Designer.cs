@@ -37,8 +37,6 @@
             this.Status = new System.Windows.Forms.Label();
             this.Count = new System.Windows.Forms.Label();
             this.File_Name = new System.Windows.Forms.Label();
-            this.checkBoxPost = new System.Windows.Forms.CheckBox();
-            this.UrlText = new System.Windows.Forms.TextBox();
             this.ChoosePath = new System.Windows.Forms.GroupBox();
             this.FolderPath = new System.Windows.Forms.RadioButton();
             this.FilePath = new System.Windows.Forms.RadioButton();
@@ -53,12 +51,12 @@
             this.CurrentPath = new System.Windows.Forms.Label();
             this.CurrentPathFileForHashSum = new System.Windows.Forms.Label();
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.About_Button = new System.Windows.Forms.Button();
             this.SavedPathListBox = new System.Windows.Forms.ListBox();
             this.Add_Path = new System.Windows.Forms.Button();
             this.Delete_Path = new System.Windows.Forms.Button();
             this.Delete_All = new System.Windows.Forms.Button();
             this.groupBoxSavedPath = new System.Windows.Forms.GroupBox();
-            this.About_Button = new System.Windows.Forms.Button();
             this.AbortButton = new System.Windows.Forms.Button();
             this.ChoosePath.SuspendLayout();
             this.ChooseHashAlgorithm.SuspendLayout();
@@ -68,9 +66,10 @@
             // 
             // HashSum
             // 
-            this.HashSum.Location = new System.Drawing.Point(3, 39);
+            this.HashSum.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.HashSum.Location = new System.Drawing.Point(292, 204);
             this.HashSum.Name = "HashSum";
-            this.HashSum.Size = new System.Drawing.Size(141, 30);
+            this.HashSum.Size = new System.Drawing.Size(350, 33);
             this.HashSum.TabIndex = 0;
             this.HashSum.Text = "Generate Hash Sum";
             this.HashSum.UseVisualStyleBackColor = true;
@@ -80,7 +79,7 @@
             // 
             this.Path.Location = new System.Drawing.Point(3, 3);
             this.Path.Name = "Path";
-            this.Path.Size = new System.Drawing.Size(141, 30);
+            this.Path.Size = new System.Drawing.Size(140, 30);
             this.Path.TabIndex = 1;
             this.Path.Text = "Path";
             this.Path.UseVisualStyleBackColor = true;
@@ -88,9 +87,9 @@
             // 
             // OpenTxt
             // 
-            this.OpenTxt.Location = new System.Drawing.Point(3, 121);
+            this.OpenTxt.Location = new System.Drawing.Point(3, 80);
             this.OpenTxt.Name = "OpenTxt";
-            this.OpenTxt.Size = new System.Drawing.Size(141, 30);
+            this.OpenTxt.Size = new System.Drawing.Size(140, 30);
             this.OpenTxt.TabIndex = 2;
             this.OpenTxt.Text = "Open File With Hash Sum";
             this.OpenTxt.UseVisualStyleBackColor = true;
@@ -98,9 +97,9 @@
             // 
             // ClearFile
             // 
-            this.ClearFile.Location = new System.Drawing.Point(3, 157);
+            this.ClearFile.Location = new System.Drawing.Point(3, 116);
             this.ClearFile.Name = "ClearFile";
-            this.ClearFile.Size = new System.Drawing.Size(141, 30);
+            this.ClearFile.Size = new System.Drawing.Size(140, 30);
             this.ClearFile.TabIndex = 3;
             this.ClearFile.Text = "Clear File With Hash Sum";
             this.ClearFile.UseVisualStyleBackColor = true;
@@ -127,9 +126,9 @@
             this.Count.AutoSize = true;
             this.Count.Location = new System.Drawing.Point(572, 266);
             this.Count.Name = "Count";
-            this.Count.Size = new System.Drawing.Size(91, 13);
+            this.Count.Size = new System.Drawing.Size(100, 13);
             this.Count.TabIndex = 6;
-            this.Count.Text = "Count of files: 0/0";
+            this.Count.Text = "Number of files: 0/0";
             // 
             // File_Name
             // 
@@ -139,26 +138,6 @@
             this.File_Name.Size = new System.Drawing.Size(26, 13);
             this.File_Name.TabIndex = 7;
             this.File_Name.Text = "File:";
-            // 
-            // checkBoxPost
-            // 
-            this.checkBoxPost.AutoSize = true;
-            this.checkBoxPost.Location = new System.Drawing.Point(292, 184);
-            this.checkBoxPost.Name = "checkBoxPost";
-            this.checkBoxPost.Size = new System.Drawing.Size(99, 17);
-            this.checkBoxPost.TabIndex = 9;
-            this.checkBoxPost.Text = "Post on the site";
-            this.checkBoxPost.UseVisualStyleBackColor = true;
-            this.checkBoxPost.CheckedChanged += new System.EventHandler(this.checkBoxPost_CheckedChanged);
-            // 
-            // UrlText
-            // 
-            this.UrlText.Enabled = false;
-            this.UrlText.Location = new System.Drawing.Point(292, 205);
-            this.UrlText.Name = "UrlText";
-            this.UrlText.Size = new System.Drawing.Size(350, 20);
-            this.UrlText.TabIndex = 10;
-            this.UrlText.TextChanged += new System.EventHandler(this.UrlText_TextChanged);
             // 
             // ChoosePath
             // 
@@ -207,6 +186,7 @@
             this.ChooseHashAlgorithm.Size = new System.Drawing.Size(127, 155);
             this.ChooseHashAlgorithm.TabIndex = 12;
             this.ChooseHashAlgorithm.TabStop = false;
+            this.ChooseHashAlgorithm.Text = "Algorithms";
             // 
             // ChooseRIPEMD160
             // 
@@ -278,11 +258,11 @@
             // 
             // ChoosePathTxt
             // 
-            this.ChoosePathTxt.Location = new System.Drawing.Point(3, 75);
+            this.ChoosePathTxt.Location = new System.Drawing.Point(3, 39);
             this.ChoosePathTxt.Name = "ChoosePathTxt";
-            this.ChoosePathTxt.Size = new System.Drawing.Size(141, 40);
+            this.ChoosePathTxt.Size = new System.Drawing.Size(140, 35);
             this.ChoosePathTxt.TabIndex = 13;
-            this.ChoosePathTxt.Text = "Choose Path For File With Hash Sum";
+            this.ChoosePathTxt.Text = "Choose Path For Hash Sum Export File";
             this.ChoosePathTxt.UseVisualStyleBackColor = true;
             this.ChoosePathTxt.Click += new System.EventHandler(this.ChoosePathTxt_Click);
             // 
@@ -300,21 +280,31 @@
             this.CurrentPathFileForHashSum.AutoSize = true;
             this.CurrentPathFileForHashSum.Location = new System.Drawing.Point(12, 27);
             this.CurrentPathFileForHashSum.Name = "CurrentPathFileForHashSum";
-            this.CurrentPathFileForHashSum.Size = new System.Drawing.Size(161, 13);
+            this.CurrentPathFileForHashSum.Size = new System.Drawing.Size(110, 13);
             this.CurrentPathFileForHashSum.TabIndex = 15;
-            this.CurrentPathFileForHashSum.Text = "Current path file with Hash Sum: ";
+            this.CurrentPathFileForHashSum.Text = "Hash Sum export file: ";
             // 
             // flowLayoutPanel
             // 
             this.flowLayoutPanel.Controls.Add(this.Path);
-            this.flowLayoutPanel.Controls.Add(this.HashSum);
             this.flowLayoutPanel.Controls.Add(this.ChoosePathTxt);
             this.flowLayoutPanel.Controls.Add(this.OpenTxt);
             this.flowLayoutPanel.Controls.Add(this.ClearFile);
+            this.flowLayoutPanel.Controls.Add(this.About_Button);
             this.flowLayoutPanel.Location = new System.Drawing.Point(11, 43);
             this.flowLayoutPanel.Name = "flowLayoutPanel";
             this.flowLayoutPanel.Size = new System.Drawing.Size(148, 189);
             this.flowLayoutPanel.TabIndex = 16;
+            // 
+            // About_Button
+            // 
+            this.About_Button.Location = new System.Drawing.Point(3, 152);
+            this.About_Button.Name = "About_Button";
+            this.About_Button.Size = new System.Drawing.Size(140, 30);
+            this.About_Button.TabIndex = 23;
+            this.About_Button.Text = "About";
+            this.About_Button.UseVisualStyleBackColor = true;
+            this.About_Button.Click += new System.EventHandler(this.About_Button_Click);
             // 
             // SavedPathListBox
             // 
@@ -322,7 +312,7 @@
             this.SavedPathListBox.HorizontalScrollbar = true;
             this.SavedPathListBox.Location = new System.Drawing.Point(87, 8);
             this.SavedPathListBox.Name = "SavedPathListBox";
-            this.SavedPathListBox.Size = new System.Drawing.Size(338, 121);
+            this.SavedPathListBox.Size = new System.Drawing.Size(338, 147);
             this.SavedPathListBox.TabIndex = 17;
             this.SavedPathListBox.SelectedIndexChanged += new System.EventHandler(this.SavedPathListBox_SelectedIndexChanged);
             // 
@@ -365,25 +355,15 @@
             this.groupBoxSavedPath.Controls.Add(this.Delete_Path);
             this.groupBoxSavedPath.Location = new System.Drawing.Point(292, 43);
             this.groupBoxSavedPath.Name = "groupBoxSavedPath";
-            this.groupBoxSavedPath.Size = new System.Drawing.Size(431, 135);
+            this.groupBoxSavedPath.Size = new System.Drawing.Size(431, 160);
             this.groupBoxSavedPath.TabIndex = 22;
             this.groupBoxSavedPath.TabStop = false;
-            this.groupBoxSavedPath.Text = "Saved path";
-            // 
-            // About_Button
-            // 
-            this.About_Button.Location = new System.Drawing.Point(648, 203);
-            this.About_Button.Name = "About_Button";
-            this.About_Button.Size = new System.Drawing.Size(75, 23);
-            this.About_Button.TabIndex = 23;
-            this.About_Button.Text = "About";
-            this.About_Button.UseVisualStyleBackColor = true;
-            this.About_Button.Click += new System.EventHandler(this.About_Button_Click);
+            this.groupBoxSavedPath.Text = "Favourites";
             // 
             // AbortButton
             // 
             this.AbortButton.Enabled = false;
-            this.AbortButton.Location = new System.Drawing.Point(648, 178);
+            this.AbortButton.Location = new System.Drawing.Point(648, 209);
             this.AbortButton.Name = "AbortButton";
             this.AbortButton.Size = new System.Drawing.Size(75, 23);
             this.AbortButton.TabIndex = 24;
@@ -397,15 +377,13 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(735, 311);
             this.Controls.Add(this.AbortButton);
-            this.Controls.Add(this.About_Button);
+            this.Controls.Add(this.HashSum);
             this.Controls.Add(this.groupBoxSavedPath);
             this.Controls.Add(this.flowLayoutPanel);
             this.Controls.Add(this.CurrentPathFileForHashSum);
             this.Controls.Add(this.CurrentPath);
             this.Controls.Add(this.ChooseHashAlgorithm);
             this.Controls.Add(this.ChoosePath);
-            this.Controls.Add(this.UrlText);
-            this.Controls.Add(this.checkBoxPost);
             this.Controls.Add(this.File_Name);
             this.Controls.Add(this.Count);
             this.Controls.Add(this.Status);
@@ -439,8 +417,8 @@
         public System.Windows.Forms.Label Status;
         public System.Windows.Forms.Label Count;
         private System.Windows.Forms.Label File_Name;
-        private System.Windows.Forms.CheckBox checkBoxPost;
-        private System.Windows.Forms.TextBox UrlText;
+        //private System.Windows.Forms.CheckBox checkBoxPost;
+        //private System.Windows.Forms.TextBox UrlText;
         private System.Windows.Forms.GroupBox ChoosePath;
         private System.Windows.Forms.RadioButton FolderPath;
         private System.Windows.Forms.RadioButton FilePath;

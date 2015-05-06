@@ -51,26 +51,26 @@ namespace Hash_Sum_Generator
                 Hash_Sum_Generator.Properties.Settings.Default.PathForFileWithHashSum = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
                 stPathOfHashSumTxt = Hash_Sum_Generator.Properties.Settings.Default.PathForFileWithHashSum;
             }
-                
 
-            CurrentPathFileForHashSum.Text = "Current path file with Hash Sum:  " + stPathOfHashSumTxt + "\\Hash Sum.txt";
 
-            UrlText.Text = Hash_Sum_Generator.Properties.Settings.Default.UrlText;
+            CurrentPathFileForHashSum.Text = "Hash Sum export file:  " + stPathOfHashSumTxt + "\\Hash Sum.txt";
 
-            checkBoxPost.Checked = Hash_Sum_Generator.Properties.Settings.Default.Post_on_the_site;
+            //UrlText.Text = Hash_Sum_Generator.Properties.Settings.Default.UrlText;
 
-            if (checkBoxPost.Checked == true)
-            {
-                OpenTxt.Enabled = false;
-                ClearFile.Enabled = false;
-                UrlText.Enabled = true;
-            }
-            else
-            {
-                OpenTxt.Enabled = true;
-                ClearFile.Enabled = true;
-                UrlText.Enabled = false;
-            }
+            //checkBoxPost.Checked = Hash_Sum_Generator.Properties.Settings.Default.Post_on_the_site;
+
+            //if (checkBoxPost.Checked == true)
+            //{
+            //    OpenTxt.Enabled = false;
+            //    ClearFile.Enabled = false;
+            //    UrlText.Enabled = true;
+            //}
+            //else
+            //{
+            //    OpenTxt.Enabled = true;
+            //    ClearFile.Enabled = true;
+            //    UrlText.Enabled = false;
+            //}
 
             switch (Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm)
             {
@@ -122,7 +122,7 @@ namespace Hash_Sum_Generator
                 FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash Sums.txt");
                 fs.Close();
 
-                CurrentPathFileForHashSum.Text = "Current path file with Hash Sum:  " + stPathOfHashSumTxt + "\\Hash Sum.txt";
+                CurrentPathFileForHashSum.Text = "Hash Sum export file:  " + stPathOfHashSumTxt + "\\Hash Sum.txt";
                 Hash_Sum_Generator.Properties.Settings.Default.PathForFileWithHashSum = stPathOfHashSumTxt;
                 Hash_Sum_Generator.Properties.Settings.Default.Save();
             }
@@ -241,28 +241,28 @@ namespace Hash_Sum_Generator
         }
 
         //Post on the site
-        private void POST(string Data, string Url)
-        {
-            try
-            {
-                System.Net.WebRequest req = System.Net.WebRequest.Create(Url);
-                req.Method = "POST";
-                req.Timeout = 100000;
-                req.ContentType = "application/x-www-form-urlencoded";
-                byte[] sentData = Encoding.GetEncoding(1251).GetBytes(Data);
-                req.ContentLength = sentData.Length;
-                System.IO.Stream sendStream = req.GetRequestStream();
-                sendStream.Write(sentData, 0, sentData.Length);
-                sendStream.Close();
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message != "Поток находился в процессе прерывания.")
-                    MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                else
-                    throw;
-            }
-        }
+        //private void POST(string Data, string Url)
+        //{
+        //    try
+        //    {
+        //        System.Net.WebRequest req = System.Net.WebRequest.Create(Url);
+        //        req.Method = "POST";
+        //        req.Timeout = 100000;
+        //        req.ContentType = "application/x-www-form-urlencoded";
+        //        byte[] sentData = Encoding.GetEncoding(1251).GetBytes(Data);
+        //        req.ContentLength = sentData.Length;
+        //        System.IO.Stream sendStream = req.GetRequestStream();
+        //        sendStream.Write(sentData, 0, sentData.Length);
+        //        sendStream.Close();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        if (ex.Message != "Поток находился в процессе прерывания.")
+        //            MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //        else
+        //            throw;
+        //    }
+        //}
 
         //Main function
         public void GenerateHash()
@@ -294,19 +294,10 @@ namespace Hash_Sum_Generator
                 Invoke((Action)(() =>
                 {
                     flowLayoutPanel.Enabled = false;
-                    //Path.Enabled = false;
-                    //HashSum.Enabled = false;
-                    //OpenTxt.Enabled = false;
-                    //ClearFile.Enabled = false;
-                    //OpenTxt.Enabled = false;
-                    //ClearFile.Enabled = false;
                     groupBoxSavedPath.Enabled = false;
                     About_Button.Enabled = false;
-                    UrlText.Enabled = false;
-                    checkBoxPost.Enabled = false;
                     ChooseHashAlgorithm.Enabled = false;
                     ChoosePath.Enabled = false;
-                    //ChoosePathTxt.Enabled = false;
                     AbortButton.Enabled = true;
 
                     progressBar1.Value = 0;
@@ -339,138 +330,131 @@ namespace Hash_Sum_Generator
                 }
                 */
 
-                if (checkBoxPost.Checked == false)
+                //if (checkBoxPost.Checked == false)
+                //{
+
+                Invoke((Action)(() =>
                 {
-                    Invoke((Action)(() =>
-                    {
-                        Count.Text = "Count of files: " + "0/" + Convert.ToString(stFiles.Length);
-                        progressBar1.Value = 0;
-                        Status.Text = "Status: Generate hesh sum...";
-                    }));
+                    Count.Text = "Count of files: " + "0/" + Convert.ToString(stFiles.Length);
+                    progressBar1.Value = 0;
+                    Status.Text = "Status: Generate hesh sum...";
+                }));
 
-                    StreamWriter HashWrite;
+                StreamWriter HashWrite;
 
-                    FileInfo file = new FileInfo(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                FileInfo file = new FileInfo(stPathOfHashSumTxt + "\\Hash Sums.txt");
 
-                    if ((File.ReadAllLines(stPathOfHashSumTxt + "\\Hash Sums.txt")).Length != 0)
-                    {
-                        HashWrite = file.AppendText();
-                        HashWrite.WriteLine("\n");
-                        HashWrite.Close();
-                    }
-
-                    for (Int32 i = 0; i < stFiles.Length; i++)
-                    {
-
-                        HashWrite = file.AppendText();
-
-                        switch (Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm)
-                        {
-                            case "MD5":
-                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeMD5Checksum(stFilesFull[i]));
-                                break;
-                            case "RIPEMD160":
-                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeRIPEMD160Checksum(stFilesFull[i]));
-                                break;
-                            case "SHA1":
-                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA1Checksum(stFilesFull[i]));
-                                break;
-                            case "SHA256":
-                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA256Checksum(stFilesFull[i]));
-                                break;
-                            case "SHA384":
-                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA384Checksum(stFilesFull[i]));
-                                break;
-                            case "SHA512":
-                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA512Checksum(stFilesFull[i]));
-                                break;
-                            default:
-                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeMD5Checksum(stFilesFull[i]));
-                                break;
-                        }
-
-                        //if (ChooseMD5.Checked == true)
-                        //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeMD5Checksum(stFilesFull[i]));
-                        //else if (ChooseSHA1.Checked == true)
-                        //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA1Checksum(stFilesFull[i]));
-                        //else if (ChooseSHA256.Checked == true)
-                        //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA256Checksum(stFilesFull[i]));
-                        //else if (ChooseSHA384.Checked == true)
-                        //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA384Checksum(stFilesFull[i]));
-                        //else if (ChooseSHA512.Checked == true)
-                        //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA512Checksum(stFilesFull[i]));
-                        //else if (ChooseRIPEMD160.Checked == true)
-                        //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeRIPEMD160Checksum(stFilesFull[i]));
-
-                        HashWrite.Close();
-
-                        Invoke((Action)(() =>
-                        {
-                            progressBar1.Value++;
-                            Count.Text = "Count of files: " + (i + 1) + "/" + Convert.ToString(stFiles.Length);
-                            File_Name.Text = "File:  " + stFilesFull[i];
-                        }));
-                    }
-
-                
-                } 
-                else
+                if ((File.ReadAllLines(stPathOfHashSumTxt + "\\Hash Sums.txt")).Length != 0)
                 {
-                    Invoke((Action)(() =>
-                    {
-                        progressBar1.Value = 0;
-                        Status.Text = "Status: Load in site...";
-                    }));
-                
-                    for (Int32 i = 0; i < stFiles.Length; i++)
-                    {
-                        Invoke((Action)(() =>
-                        {
-                            progressBar1.Value++;
-                            Count.Text = "Count of files: " + (i + 1) + "/" + Convert.ToString(stFiles.Length);
-                            File_Name.Text = " " + stFilesFull[i];
-                        }));
-
-                        POST("key=" + stFiles[i] + "&" + "stmd5=" + ComputeMD5Checksum(stFilesFull[i]), UrlText.Text);
-                    }
+                    HashWrite = file.AppendText();
+                    HashWrite.WriteLine("\n");
+                    HashWrite.Close();
                 }
+
+                for (Int32 i = 0; i < stFiles.Length; i++)
+                {
+
+                    HashWrite = file.AppendText();
+
+                    switch (Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm)
+                    {
+                        case "MD5":
+                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeMD5Checksum(stFilesFull[i]));
+                            break;
+                        case "RIPEMD160":
+                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeRIPEMD160Checksum(stFilesFull[i]));
+                            break;
+                        case "SHA1":
+                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA1Checksum(stFilesFull[i]));
+                            break;
+                        case "SHA256":
+                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA256Checksum(stFilesFull[i]));
+                            break;
+                        case "SHA384":
+                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA384Checksum(stFilesFull[i]));
+                            break;
+                        case "SHA512":
+                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA512Checksum(stFilesFull[i]));
+                            break;
+                        default:
+                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeMD5Checksum(stFilesFull[i]));
+                            break;
+                    }
+
+                    //if (ChooseMD5.Checked == true)
+                    //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeMD5Checksum(stFilesFull[i]));
+                    //else if (ChooseSHA1.Checked == true)
+                    //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA1Checksum(stFilesFull[i]));
+                    //else if (ChooseSHA256.Checked == true)
+                    //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA256Checksum(stFilesFull[i]));
+                    //else if (ChooseSHA384.Checked == true)
+                    //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA384Checksum(stFilesFull[i]));
+                    //else if (ChooseSHA512.Checked == true)
+                    //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA512Checksum(stFilesFull[i]));
+                    //else if (ChooseRIPEMD160.Checked == true)
+                    //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeRIPEMD160Checksum(stFilesFull[i]));
+
+                    HashWrite.Close();
+
+                    Invoke((Action)(() =>
+                    {
+                        progressBar1.Value++;
+                        Count.Text = "Count of files: " + (i + 1) + "/" + Convert.ToString(stFiles.Length);
+                        File_Name.Text = "File:  " + stFilesFull[i];
+                    }));
+                }
+
+                //} 
+                //else
+                //{
+                //    Invoke((Action)(() =>
+                //    {
+                //        progressBar1.Value = 0;
+                //        Status.Text = "Status: Load in site...";
+                //    }));
+                
+                //    for (Int32 i = 0; i < stFiles.Length; i++)
+                //    {
+                //        Invoke((Action)(() =>
+                //        {
+                //            progressBar1.Value++;
+                //            Count.Text = "Count of files: " + (i + 1) + "/" + Convert.ToString(stFiles.Length);
+                //            File_Name.Text = " " + stFilesFull[i];
+                //        }));
+
+                //        POST("key=" + stFiles[i] + "&" + "stmd5=" + ComputeMD5Checksum(stFilesFull[i]), UrlText.Text);
+                //    }
+                //}
 
                 Invoke((Action)(() =>
                 {
                     Status.Text = "Status: Complete";
 
-                    //TopMost = true;
-                    //TopMost = false;
-                    //Path.Enabled = true;
-                    //HashSum.Enabled = true;
-                    //OpenTxt.Enabled = true;
-                    //ClearFile.Enabled = true;
+                    //UrlText.Enabled = true;
                     //checkBoxPost.Enabled = true;
-                    //ChooseHashAlgorithm.Enabled = true;
-                    //ChoosePath.Enabled = true;
-                    //ChoosePathTxt.Enabled = true;
 
                     AbortButton.Enabled = false;
                     groupBoxSavedPath.Enabled = true;
                     About_Button.Enabled = true;
                     flowLayoutPanel.Enabled = true;
-                    UrlText.Enabled = true;
-                    checkBoxPost.Enabled = true;
+                    
                     ChooseHashAlgorithm.Enabled = true;
                     ChoosePath.Enabled = true;
+                    OpenTxt.Enabled = true;
+                    ClearFile.Enabled = true;
 
-                    if (checkBoxPost.Checked == true)
-                    {
-                        OpenTxt.Enabled = false;
-                        ClearFile.Enabled = false;
-                        UrlText.Enabled = true;
-                    }
-                    else
-                    {
-                        OpenTxt.Enabled = true;
-                        ClearFile.Enabled = true;
-                        UrlText.Enabled = false;
-                    }
+                    //if (checkBoxPost.Checked == true)
+                    //{
+                    //    OpenTxt.Enabled = false;
+                    //    ClearFile.Enabled = false;
+                    //    UrlText.Enabled = true;
+                    //}
+                    //else
+                    //{
+                    //    OpenTxt.Enabled = true;
+                    //    ClearFile.Enabled = true;
+                    //    UrlText.Enabled = false;
+                    //}
 
                     MessageBox.Show("Complete");
                 }));
@@ -546,30 +530,30 @@ namespace Hash_Sum_Generator
             }
         }
 
-        private void checkBoxPost_CheckedChanged(object sender, EventArgs e)
-        {
-            Hash_Sum_Generator.Properties.Settings.Default.Post_on_the_site = checkBoxPost.Checked;
-            Hash_Sum_Generator.Properties.Settings.Default.Save();
+        //private void checkBoxPost_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    Hash_Sum_Generator.Properties.Settings.Default.Post_on_the_site = checkBoxPost.Checked;
+        //    Hash_Sum_Generator.Properties.Settings.Default.Save();
 
-            if (checkBoxPost.Checked == true)
-            {
-                OpenTxt.Enabled = false;
-                ClearFile.Enabled = false;
-                UrlText.Enabled = true;
-            }
-            else
-            {
-                OpenTxt.Enabled = true;
-                ClearFile.Enabled = true;
-                UrlText.Enabled = false;
-            }
-        }
+        //    if (checkBoxPost.Checked == true)
+        //    {
+        //        OpenTxt.Enabled = false;
+        //        ClearFile.Enabled = false;
+        //        UrlText.Enabled = true;
+        //    }
+        //    else
+        //    {
+        //        OpenTxt.Enabled = true;
+        //        ClearFile.Enabled = true;
+        //        UrlText.Enabled = false;
+        //    }
+        //}
 
-        private void UrlText_TextChanged(object sender, EventArgs e)
-        {
-            Hash_Sum_Generator.Properties.Settings.Default.UrlText = UrlText.Text;
-            Hash_Sum_Generator.Properties.Settings.Default.Save();
-        }
+        //private void UrlText_TextChanged(object sender, EventArgs e)
+        //{
+        //    Hash_Sum_Generator.Properties.Settings.Default.UrlText = UrlText.Text;
+        //    Hash_Sum_Generator.Properties.Settings.Default.Save();
+        //}
 
 
         private void ChooseMD5_CheckedChanged(object sender, EventArgs e)
@@ -753,23 +737,25 @@ namespace Hash_Sum_Generator
             groupBoxSavedPath.Enabled = true;
             About_Button.Enabled = true;
             flowLayoutPanel.Enabled = true;
-            UrlText.Enabled = true;
-            checkBoxPost.Enabled = true;
+            //UrlText.Enabled = true;
+            //checkBoxPost.Enabled = true;
             ChooseHashAlgorithm.Enabled = true;
             ChoosePath.Enabled = true;
+            OpenTxt.Enabled = true;
+            ClearFile.Enabled = true;
 
-            if (checkBoxPost.Checked == true)
-            {
-                OpenTxt.Enabled = false;
-                ClearFile.Enabled = false;
-                UrlText.Enabled = true;
-            }
-            else
-            {
-                OpenTxt.Enabled = true;
-                ClearFile.Enabled = true;
-                UrlText.Enabled = false;
-            }
+            //if (checkBoxPost.Checked == true)
+            //{
+            //    OpenTxt.Enabled = false;
+            //    ClearFile.Enabled = false;
+            //    UrlText.Enabled = true;
+            //}
+            //else
+            //{
+            //    OpenTxt.Enabled = true;
+            //    ClearFile.Enabled = true;
+            //    UrlText.Enabled = false;
+            //}
         }
 
 
