@@ -19,8 +19,10 @@ namespace Hash_Sum_Generator
 
     public partial class MainWindow : Form
     {
+        
         private string stPath = Hash_Sum_Generator.Properties.Settings.Default.Path;
         private string stPathOfHashSumTxt = Hash_Sum_Generator.Properties.Settings.Default.PathForFileWithHashSum;
+        private Thread Hash = null;
 
         public MainWindow()
         {
@@ -29,7 +31,28 @@ namespace Hash_Sum_Generator
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            if(Hash_Sum_Generator.Properties.Settings.Default.Saved_Path == null)
+                Hash_Sum_Generator.Properties.Settings.Default.Saved_Path = new List<string>();
+
+            if (Hash_Sum_Generator.Properties.Settings.Default.Saved_Path != null)
+                SavedPathListBox.Items.AddRange(Hash_Sum_Generator.Properties.Settings.Default.Saved_Path.ToArray());
+            //SavedPathListBox.DataSource = Hash_Sum_Generator.Properties.Settings.Default.Saved_Path;
+
+            if (!(File.Exists(stPathOfHashSumTxt + "\\Hash Sums.txt")))
+            {
+                FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                fs.Close();
+            }
+
             CurrentPath.Text = "Current path:  " + stPath;
+
+            if (Hash_Sum_Generator.Properties.Settings.Default.PathForFileWithHashSum == "")
+            {
+                Hash_Sum_Generator.Properties.Settings.Default.PathForFileWithHashSum = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+                stPathOfHashSumTxt = Hash_Sum_Generator.Properties.Settings.Default.PathForFileWithHashSum;
+            }
+                
+
             CurrentPathFileForHashSum.Text = "Current path file with Hash Sum:  " + stPathOfHashSumTxt + "\\Hash Sum.txt";
 
             UrlText.Text = Hash_Sum_Generator.Properties.Settings.Default.UrlText;
@@ -95,45 +118,53 @@ namespace Hash_Sum_Generator
             {
                 File.Delete(stPathOfHashSumTxt + "\\Hash Sums.txt");
                 stPathOfHashSumTxt = OPF.SelectedPath;
+
+                FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                fs.Close();
+
                 CurrentPathFileForHashSum.Text = "Current path file with Hash Sum:  " + stPathOfHashSumTxt + "\\Hash Sum.txt";
                 Hash_Sum_Generator.Properties.Settings.Default.PathForFileWithHashSum = stPathOfHashSumTxt;
                 Hash_Sum_Generator.Properties.Settings.Default.Save();
             }
         }
         
-        private void ChooseFolder()
+        private string ChooseFolder()
         {
             FolderBrowserDialog OPF = new FolderBrowserDialog();
             if (OPF.ShowDialog() == DialogResult.OK)
-            {
-                stPath = OPF.SelectedPath;
-                CurrentPath.Text = "Current path:  " + stPath;
-                Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
-                Hash_Sum_Generator.Properties.Settings.Default.Save();
-            }
+                return OPF.SelectedPath;
+            else
+                return stPath;
         }
 
-        private void ChooseFile()
+        private string ChooseFile()
         {
             OpenFileDialog OPF = new OpenFileDialog();
             if (OPF.ShowDialog() == DialogResult.OK)
-            {
-                stPath = OPF.FileName;
-                CurrentPath.Text = "Current path:  " + stPath;
-                Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
-                Hash_Sum_Generator.Properties.Settings.Default.Save();
-            }
+                return OPF.FileName;
+            else
+                return stPath;
         }
 
         private void Path_Click(object sender, EventArgs e)
         {
             if(FolderPath.Checked == true)
             {
-                ChooseFolder();
+                stPath = ChooseFolder();
+                CurrentPath.Text = "Current path:  " + stPath;
+                Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                Hash_Sum_Generator.Properties.Settings.Default.Save();
+
+                SavedPathListBox.SelectedIndex = -1;
             } 
             else
             {
-                ChooseFile();
+                stPath = ChooseFile();
+                CurrentPath.Text = "Current path:  " + stPath;
+                Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                Hash_Sum_Generator.Properties.Settings.Default.Save();
+
+                SavedPathListBox.SelectedIndex = -1;
             }
         }
 
@@ -226,7 +257,10 @@ namespace Hash_Sum_Generator
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (ex.Message != "Поток находился в процессе прерывания.")
+                    MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                    throw;
             }
         }
 
@@ -266,11 +300,14 @@ namespace Hash_Sum_Generator
                     //ClearFile.Enabled = false;
                     //OpenTxt.Enabled = false;
                     //ClearFile.Enabled = false;
+                    groupBoxSavedPath.Enabled = false;
+                    About_Button.Enabled = false;
                     UrlText.Enabled = false;
                     checkBoxPost.Enabled = false;
                     ChooseHashAlgorithm.Enabled = false;
                     ChoosePath.Enabled = false;
                     //ChoosePathTxt.Enabled = false;
+                    AbortButton.Enabled = true;
 
                     progressBar1.Value = 0;
                     Count.Text = "Count of files: " + "0/" + Convert.ToString(stFiles.Length);
@@ -308,29 +345,62 @@ namespace Hash_Sum_Generator
                     {
                         Count.Text = "Count of files: " + "0/" + Convert.ToString(stFiles.Length);
                         progressBar1.Value = 0;
-                        Status.Text = "Status: Create hesh sum...";
+                        Status.Text = "Status: Generate hesh sum...";
                     }));
 
                     StreamWriter HashWrite;
 
+                    FileInfo file = new FileInfo(stPathOfHashSumTxt + "\\Hash Sums.txt");
+
+                    if ((File.ReadAllLines(stPathOfHashSumTxt + "\\Hash Sums.txt")).Length != 0)
+                    {
+                        HashWrite = file.AppendText();
+                        HashWrite.WriteLine("\n");
+                        HashWrite.Close();
+                    }
+
                     for (Int32 i = 0; i < stFiles.Length; i++)
                     {
-                    
-                        FileInfo file = new FileInfo(stPathOfHashSumTxt + "\\Hash Sums.txt");
 
                         HashWrite = file.AppendText();
-                        if (ChooseMD5.Checked == true)
-                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeMD5Checksum(stFilesFull[i]));
-                        else if (ChooseSHA1.Checked == true)
-                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA1Checksum(stFilesFull[i]));
-                        else if (ChooseSHA256.Checked == true)
-                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA256Checksum(stFilesFull[i]));
-                        else if (ChooseSHA384.Checked == true)
-                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA384Checksum(stFilesFull[i]));
-                        else if (ChooseSHA512.Checked == true)
-                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA512Checksum(stFilesFull[i]));
-                        else if (ChooseRIPEMD160.Checked == true)
-                            HashWrite.WriteLine(stFiles[i] + "\t" + ComputeRIPEMD160Checksum(stFilesFull[i]));
+
+                        switch (Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm)
+                        {
+                            case "MD5":
+                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeMD5Checksum(stFilesFull[i]));
+                                break;
+                            case "RIPEMD160":
+                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeRIPEMD160Checksum(stFilesFull[i]));
+                                break;
+                            case "SHA1":
+                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA1Checksum(stFilesFull[i]));
+                                break;
+                            case "SHA256":
+                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA256Checksum(stFilesFull[i]));
+                                break;
+                            case "SHA384":
+                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA384Checksum(stFilesFull[i]));
+                                break;
+                            case "SHA512":
+                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA512Checksum(stFilesFull[i]));
+                                break;
+                            default:
+                                HashWrite.WriteLine(stFiles[i] + "\t" + ComputeMD5Checksum(stFilesFull[i]));
+                                break;
+                        }
+
+                        //if (ChooseMD5.Checked == true)
+                        //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeMD5Checksum(stFilesFull[i]));
+                        //else if (ChooseSHA1.Checked == true)
+                        //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA1Checksum(stFilesFull[i]));
+                        //else if (ChooseSHA256.Checked == true)
+                        //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA256Checksum(stFilesFull[i]));
+                        //else if (ChooseSHA384.Checked == true)
+                        //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA384Checksum(stFilesFull[i]));
+                        //else if (ChooseSHA512.Checked == true)
+                        //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA512Checksum(stFilesFull[i]));
+                        //else if (ChooseRIPEMD160.Checked == true)
+                        //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeRIPEMD160Checksum(stFilesFull[i]));
 
                         HashWrite.Close();
 
@@ -365,8 +435,6 @@ namespace Hash_Sum_Generator
                     }
                 }
 
-                MessageBox.Show("Complete");
-
                 Invoke((Action)(() =>
                 {
                     Status.Text = "Status: Complete";
@@ -382,6 +450,9 @@ namespace Hash_Sum_Generator
                     //ChoosePath.Enabled = true;
                     //ChoosePathTxt.Enabled = true;
 
+                    AbortButton.Enabled = false;
+                    groupBoxSavedPath.Enabled = true;
+                    About_Button.Enabled = true;
                     flowLayoutPanel.Enabled = true;
                     UrlText.Enabled = true;
                     checkBoxPost.Enabled = true;
@@ -400,11 +471,16 @@ namespace Hash_Sum_Generator
                         ClearFile.Enabled = true;
                         UrlText.Enabled = false;
                     }
+
+                    MessageBox.Show("Complete");
                 }));
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (ex.Message != "Поток находился в процессе прерывания.")
+                    MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                    throw;
             }
         }
 
@@ -416,7 +492,7 @@ namespace Hash_Sum_Generator
                 Count.Text = "Count of files: 0/0";
                 Status.Text = "Status: ";
                 //Thread for calculate hash
-                Thread Hash = new Thread(new ThreadStart(GenerateHash));
+                Hash = new Thread(new ThreadStart(GenerateHash));
                 Hash.IsBackground = true;
                 Hash.Start();
             }
@@ -449,20 +525,24 @@ namespace Hash_Sum_Generator
 
         private void ClearFile_Click(object sender, EventArgs e)
         {
-            if (File.Exists(stPathOfHashSumTxt + "\\Hash Sums.txt"))
+            DialogResult result = MessageBox.Show("Are you sure you want to clear file???", "", MessageBoxButtons.YesNo);
+            if (result == DialogResult.Yes)
             {
-                string s = File.ReadAllText(stPathOfHashSumTxt + "\\Hash Sums.txt");
-                s = s.Remove(0, s.Length);
-                File.WriteAllText(stPathOfHashSumTxt + "\\Hash Sums.txt", s);
-            }
-            else
-            {
-                FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash Sums.txt");
-                fs.Close();
+                if (File.Exists(stPathOfHashSumTxt + "\\Hash Sums.txt"))
+                {
+                    string s = File.ReadAllText(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                    s = s.Remove(0, s.Length);
+                    File.WriteAllText(stPathOfHashSumTxt + "\\Hash Sums.txt", s);
+                }
+                else
+                {
+                    FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                    fs.Close();
 
-                string s = File.ReadAllText(stPathOfHashSumTxt + "\\Hash Sums.txt");
-                s = s.Remove(0, s.Length);
-                File.WriteAllText(stPathOfHashSumTxt + "\\Hash Sums.txt", s);
+                    string s = File.ReadAllText(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                    s = s.Remove(0, s.Length);
+                    File.WriteAllText(stPathOfHashSumTxt + "\\Hash Sums.txt", s);
+                }
             }
         }
 
@@ -489,19 +569,6 @@ namespace Hash_Sum_Generator
         {
             Hash_Sum_Generator.Properties.Settings.Default.UrlText = UrlText.Text;
             Hash_Sum_Generator.Properties.Settings.Default.Save();
-        }
-
-        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            ThreadStart ts = delegate()
-            {
-                BeginInvoke((Action)delegate()
-                {
-                    Application.Exit();
-                });
-            };
-            Thread t = new Thread(ts);
-            t.Start();
         }
 
 
@@ -540,19 +607,185 @@ namespace Hash_Sum_Generator
             Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "SHA512";
             Hash_Sum_Generator.Properties.Settings.Default.Save();
         }
-
         
 
         private void FilePath_CheckedChanged(object sender, EventArgs e)
         {
-            Hash_Sum_Generator.Properties.Settings.Default.File_or_Folder = "File";
-            Hash_Sum_Generator.Properties.Settings.Default.Save();
+            if(FilePath.Checked == true)
+            {
+                if (stPath.IndexOf(".") == -1)
+                {
+                    stPath = "";
+                    CurrentPath.Text = "Current path:  ";
+                    Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.Save();
+                }
+                Hash_Sum_Generator.Properties.Settings.Default.File_or_Folder = "File";
+                Hash_Sum_Generator.Properties.Settings.Default.Save();
+            }
         }
 
         private void FolderPath_CheckedChanged(object sender, EventArgs e)
         {
-            Hash_Sum_Generator.Properties.Settings.Default.File_or_Folder = "Folder";
-            Hash_Sum_Generator.Properties.Settings.Default.Save();
+            if (FolderPath.Checked == true)
+            {
+                if (stPath.IndexOf(".") != -1)
+                {
+                    stPath = "";
+                    CurrentPath.Text = "Current path:  ";
+                    Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.Save();
+                }
+                Hash_Sum_Generator.Properties.Settings.Default.File_or_Folder = "Folder";
+                Hash_Sum_Generator.Properties.Settings.Default.Save();
+            }
         }
+
+
+        private void Add_Path_Click(object sender, EventArgs e)
+        {
+            if (FolderPath.Checked == true)
+            {
+                string stTMPPath = ChooseFolder();
+                if (stTMPPath != "" && Hash_Sum_Generator.Properties.Settings.Default.Saved_Path.Contains(stTMPPath) == false)
+                {
+                    SavedPathListBox.Items.Add(stTMPPath);
+                    stPath = Convert.ToString(SavedPathListBox.Items[SavedPathListBox.Items.Count - 1]);
+                    CurrentPath.Text = "Current path:  " + stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.Saved_Path = SavedPathListBox.Items.OfType<string>().ToList();
+                    Hash_Sum_Generator.Properties.Settings.Default.Save();
+
+                    SavedPathListBox.SelectedIndex = SavedPathListBox.Items.Count - 1;
+                }
+                else
+                    SavedPathListBox.SelectedIndex = Hash_Sum_Generator.Properties.Settings.Default.Saved_Path.FindIndex(x => x.StartsWith(stTMPPath));
+            }
+            else
+            {
+                string stTMPPath = ChooseFile();
+                if (stTMPPath != "" && Hash_Sum_Generator.Properties.Settings.Default.Saved_Path.Contains(stTMPPath) == false)
+                {
+                    SavedPathListBox.Items.Add(stTMPPath);
+                    stPath = Convert.ToString(SavedPathListBox.Items[SavedPathListBox.Items.Count - 1]);
+                    CurrentPath.Text = "Current path:  " + stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.Saved_Path = SavedPathListBox.Items.OfType<string>().ToList();
+                    Hash_Sum_Generator.Properties.Settings.Default.Save();
+
+                    SavedPathListBox.SelectedIndex = SavedPathListBox.Items.Count - 1;
+                }
+                else
+                    SavedPathListBox.SelectedIndex = Hash_Sum_Generator.Properties.Settings.Default.Saved_Path.FindIndex(x => x.StartsWith(stTMPPath));
+            }
+        }
+
+        private void Delete_Path_Click(object sender, EventArgs e)
+        {
+            if (SavedPathListBox.SelectedIndex != -1)
+            {
+                Hash_Sum_Generator.Properties.Settings.Default.Saved_Path.RemoveAt(SavedPathListBox.SelectedIndex);
+
+                SavedPathListBox.Items.Remove(SavedPathListBox.SelectedItem);
+
+                Hash_Sum_Generator.Properties.Settings.Default.Save();
+
+                SavedPathListBox.SelectedIndex = SavedPathListBox.Items.Count - 1;
+            }
+            
+        }
+
+        private void Delete_All_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Are you sure you want to delete all???", "", MessageBoxButtons.YesNo);
+            if(result == DialogResult.Yes)
+            {
+                SavedPathListBox.Items.Clear();
+                Hash_Sum_Generator.Properties.Settings.Default.Saved_Path.Clear();
+                Hash_Sum_Generator.Properties.Settings.Default.Save();
+            }
+            
+        }
+
+        private void SavedPathListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(SavedPathListBox.Items.Count != 0)
+            {
+                if (SavedPathListBox.SelectedItem != null && SavedPathListBox.SelectedIndex != -1)
+                {
+                    stPath = Convert.ToString(SavedPathListBox.SelectedItem);
+                    CurrentPath.Text = "Current path:  " + stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.Save();
+
+                    if (stPath.IndexOf(".") > 0)
+                        FilePath.Checked = true;
+                    else
+                        FolderPath.Checked = true;
+                }
+            }
+            else
+            {
+                stPath = "";
+                CurrentPath.Text = "Current path:  ";
+                Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                Hash_Sum_Generator.Properties.Settings.Default.Save();
+            }
+            
+
+            //int n = stPath.IndexOf(".");
+        }
+
+
+        private void About_Button_Click(object sender, EventArgs e)
+        {
+            AboutWindow form = new AboutWindow();
+            form.ShowDialog();
+        }
+
+
+        private void AbortButton_Click(object sender, EventArgs e)
+        {
+            Hash.Abort();
+            Status.Text = "Status: Aborted";
+
+            AbortButton.Enabled = false;
+            groupBoxSavedPath.Enabled = true;
+            About_Button.Enabled = true;
+            flowLayoutPanel.Enabled = true;
+            UrlText.Enabled = true;
+            checkBoxPost.Enabled = true;
+            ChooseHashAlgorithm.Enabled = true;
+            ChoosePath.Enabled = true;
+
+            if (checkBoxPost.Checked == true)
+            {
+                OpenTxt.Enabled = false;
+                ClearFile.Enabled = false;
+                UrlText.Enabled = true;
+            }
+            else
+            {
+                OpenTxt.Enabled = true;
+                ClearFile.Enabled = true;
+                UrlText.Enabled = false;
+            }
+        }
+
+
+        private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            ThreadStart ts = delegate()
+            {
+                BeginInvoke((Action)delegate()
+                {
+                    Application.Exit();
+                });
+            };
+            Thread t = new Thread(ts);
+            t.Start();
+        }
+
+        
     }
 }

@@ -25,7 +25,7 @@ namespace Hash_Sum_Generator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\\\Windows\\\\Temp")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string PathForFileWithHashSum {
             get {
                 return ((string)(this["PathForFileWithHashSum"]));
@@ -92,6 +92,17 @@ namespace Hash_Sum_Generator.Properties {
             }
             set {
                 this["File_or_Folder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Generic.List<System.String> Saved_Path {
+            get {
+                return ((global::System.Collections.Generic.List<System.String>)(this["Saved_Path"]));
+            }
+            set {
+                this["Saved_Path"] = value;
             }
         }
     }

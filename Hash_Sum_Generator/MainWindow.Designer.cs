@@ -53,9 +53,17 @@
             this.CurrentPath = new System.Windows.Forms.Label();
             this.CurrentPathFileForHashSum = new System.Windows.Forms.Label();
             this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.SavedPathListBox = new System.Windows.Forms.ListBox();
+            this.Add_Path = new System.Windows.Forms.Button();
+            this.Delete_Path = new System.Windows.Forms.Button();
+            this.Delete_All = new System.Windows.Forms.Button();
+            this.groupBoxSavedPath = new System.Windows.Forms.GroupBox();
+            this.About_Button = new System.Windows.Forms.Button();
+            this.AbortButton = new System.Windows.Forms.Button();
             this.ChoosePath.SuspendLayout();
             this.ChooseHashAlgorithm.SuspendLayout();
             this.flowLayoutPanel.SuspendLayout();
+            this.groupBoxSavedPath.SuspendLayout();
             this.SuspendLayout();
             // 
             // HashSum
@@ -135,7 +143,7 @@
             // checkBoxPost
             // 
             this.checkBoxPost.AutoSize = true;
-            this.checkBoxPost.Location = new System.Drawing.Point(456, 184);
+            this.checkBoxPost.Location = new System.Drawing.Point(292, 184);
             this.checkBoxPost.Name = "checkBoxPost";
             this.checkBoxPost.Size = new System.Drawing.Size(99, 17);
             this.checkBoxPost.TabIndex = 9;
@@ -146,9 +154,9 @@
             // UrlText
             // 
             this.UrlText.Enabled = false;
-            this.UrlText.Location = new System.Drawing.Point(456, 207);
+            this.UrlText.Location = new System.Drawing.Point(292, 205);
             this.UrlText.Name = "UrlText";
-            this.UrlText.Size = new System.Drawing.Size(267, 20);
+            this.UrlText.Size = new System.Drawing.Size(350, 20);
             this.UrlText.TabIndex = 10;
             this.UrlText.TextChanged += new System.EventHandler(this.UrlText_TextChanged);
             // 
@@ -165,12 +173,10 @@
             // FolderPath
             // 
             this.FolderPath.AutoSize = true;
-            this.FolderPath.Checked = true;
             this.FolderPath.Location = new System.Drawing.Point(67, 13);
             this.FolderPath.Name = "FolderPath";
             this.FolderPath.Size = new System.Drawing.Size(54, 17);
             this.FolderPath.TabIndex = 1;
-            this.FolderPath.TabStop = true;
             this.FolderPath.Text = "Folder";
             this.FolderPath.UseVisualStyleBackColor = true;
             this.FolderPath.CheckedChanged += new System.EventHandler(this.FolderPath_CheckedChanged);
@@ -178,6 +184,7 @@
             // FilePath
             // 
             this.FilePath.AutoSize = true;
+            this.FilePath.Checked = true;
             this.FilePath.Location = new System.Drawing.Point(6, 13);
             this.FilePath.Name = "FilePath";
             this.FilePath.Size = new System.Drawing.Size(41, 17);
@@ -309,11 +316,89 @@
             this.flowLayoutPanel.Size = new System.Drawing.Size(148, 189);
             this.flowLayoutPanel.TabIndex = 16;
             // 
+            // SavedPathListBox
+            // 
+            this.SavedPathListBox.FormattingEnabled = true;
+            this.SavedPathListBox.HorizontalScrollbar = true;
+            this.SavedPathListBox.Location = new System.Drawing.Point(87, 8);
+            this.SavedPathListBox.Name = "SavedPathListBox";
+            this.SavedPathListBox.Size = new System.Drawing.Size(338, 121);
+            this.SavedPathListBox.TabIndex = 17;
+            this.SavedPathListBox.SelectedIndexChanged += new System.EventHandler(this.SavedPathListBox_SelectedIndexChanged);
+            // 
+            // Add_Path
+            // 
+            this.Add_Path.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Add_Path.Location = new System.Drawing.Point(6, 21);
+            this.Add_Path.Name = "Add_Path";
+            this.Add_Path.Size = new System.Drawing.Size(75, 23);
+            this.Add_Path.TabIndex = 19;
+            this.Add_Path.Text = "Add path";
+            this.Add_Path.UseVisualStyleBackColor = true;
+            this.Add_Path.Click += new System.EventHandler(this.Add_Path_Click);
+            // 
+            // Delete_Path
+            // 
+            this.Delete_Path.Location = new System.Drawing.Point(6, 50);
+            this.Delete_Path.Name = "Delete_Path";
+            this.Delete_Path.Size = new System.Drawing.Size(75, 23);
+            this.Delete_Path.TabIndex = 20;
+            this.Delete_Path.Text = "Delete path";
+            this.Delete_Path.UseVisualStyleBackColor = true;
+            this.Delete_Path.Click += new System.EventHandler(this.Delete_Path_Click);
+            // 
+            // Delete_All
+            // 
+            this.Delete_All.Location = new System.Drawing.Point(6, 79);
+            this.Delete_All.Name = "Delete_All";
+            this.Delete_All.Size = new System.Drawing.Size(75, 23);
+            this.Delete_All.TabIndex = 21;
+            this.Delete_All.Text = "Delete all";
+            this.Delete_All.UseVisualStyleBackColor = true;
+            this.Delete_All.Click += new System.EventHandler(this.Delete_All_Click);
+            // 
+            // groupBoxSavedPath
+            // 
+            this.groupBoxSavedPath.Controls.Add(this.SavedPathListBox);
+            this.groupBoxSavedPath.Controls.Add(this.Delete_All);
+            this.groupBoxSavedPath.Controls.Add(this.Add_Path);
+            this.groupBoxSavedPath.Controls.Add(this.Delete_Path);
+            this.groupBoxSavedPath.Location = new System.Drawing.Point(292, 43);
+            this.groupBoxSavedPath.Name = "groupBoxSavedPath";
+            this.groupBoxSavedPath.Size = new System.Drawing.Size(431, 135);
+            this.groupBoxSavedPath.TabIndex = 22;
+            this.groupBoxSavedPath.TabStop = false;
+            this.groupBoxSavedPath.Text = "Saved path";
+            // 
+            // About_Button
+            // 
+            this.About_Button.Location = new System.Drawing.Point(648, 203);
+            this.About_Button.Name = "About_Button";
+            this.About_Button.Size = new System.Drawing.Size(75, 23);
+            this.About_Button.TabIndex = 23;
+            this.About_Button.Text = "About";
+            this.About_Button.UseVisualStyleBackColor = true;
+            this.About_Button.Click += new System.EventHandler(this.About_Button_Click);
+            // 
+            // AbortButton
+            // 
+            this.AbortButton.Enabled = false;
+            this.AbortButton.Location = new System.Drawing.Point(648, 178);
+            this.AbortButton.Name = "AbortButton";
+            this.AbortButton.Size = new System.Drawing.Size(75, 23);
+            this.AbortButton.TabIndex = 24;
+            this.AbortButton.Text = "Abort";
+            this.AbortButton.UseVisualStyleBackColor = true;
+            this.AbortButton.Click += new System.EventHandler(this.AbortButton_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(735, 311);
+            this.Controls.Add(this.AbortButton);
+            this.Controls.Add(this.About_Button);
+            this.Controls.Add(this.groupBoxSavedPath);
             this.Controls.Add(this.flowLayoutPanel);
             this.Controls.Add(this.CurrentPathFileForHashSum);
             this.Controls.Add(this.CurrentPath);
@@ -338,6 +423,7 @@
             this.ChooseHashAlgorithm.ResumeLayout(false);
             this.ChooseHashAlgorithm.PerformLayout();
             this.flowLayoutPanel.ResumeLayout(false);
+            this.groupBoxSavedPath.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -369,6 +455,13 @@
         private System.Windows.Forms.Label CurrentPath;
         private System.Windows.Forms.Label CurrentPathFileForHashSum;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
+        private System.Windows.Forms.ListBox SavedPathListBox;
+        private System.Windows.Forms.Button Add_Path;
+        private System.Windows.Forms.Button Delete_Path;
+        private System.Windows.Forms.Button Delete_All;
+        private System.Windows.Forms.GroupBox groupBoxSavedPath;
+        private System.Windows.Forms.Button About_Button;
+        private System.Windows.Forms.Button AbortButton;
     }
 }
 

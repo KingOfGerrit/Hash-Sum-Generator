@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="PathForFileWithHashSum" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\\Windows\\Temp</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Path" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -18,6 +18,9 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="File_or_Folder" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Saved_Path" Type="System.Collections.Generic.List&lt;System.String&gt;" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>
