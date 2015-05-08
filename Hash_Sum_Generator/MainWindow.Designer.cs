@@ -363,9 +363,10 @@
             // AbortButton
             // 
             this.AbortButton.Enabled = false;
-            this.AbortButton.Location = new System.Drawing.Point(648, 209);
+            this.AbortButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.AbortButton.Location = new System.Drawing.Point(648, 204);
             this.AbortButton.Name = "AbortButton";
-            this.AbortButton.Size = new System.Drawing.Size(75, 23);
+            this.AbortButton.Size = new System.Drawing.Size(75, 33);
             this.AbortButton.TabIndex = 24;
             this.AbortButton.Text = "Abort";
             this.AbortButton.UseVisualStyleBackColor = true;
