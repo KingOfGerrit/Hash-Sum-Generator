@@ -1,8 +1,0 @@
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Release\Hashsum_ListOfFile.Properties.Resources.resources
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Release\Hashsum_ListOfFile.csproj.GenerateResource.Cache
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\bin\Release\Hash Sum creator.exe
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\bin\Release\Hash Sum creator.pdb
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Release\Hash Sum creator.exe
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Release\Hash Sum creator.pdb
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Release\Hashsum_ListOfFile.csprojResolveAssemblyReference.cache
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Release\Hashsum_ListOfFile.Form1.resources

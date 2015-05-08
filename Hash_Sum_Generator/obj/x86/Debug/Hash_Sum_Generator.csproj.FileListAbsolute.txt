@@ -1,28 +1,10 @@
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\bin\Debug\Hash Sum Generator.exe
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\bin\Debug\Hash Sum Generator.pdb
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Debug\Hashsum_ListOfFile.MainWindow.resources
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Debug\Hash_Sum_Generator.Properties.Resources.resources
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Debug\Hash_Sum_Generator.csproj.GenerateResource.Cache
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Debug\Hash Sum Generator.exe
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Debug\Hash Sum Generator.pdb
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\bin\Debug\Hash Sum Generator.exe.config
-C:\GAMES\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Debug\Hash_Sum_Generator.csprojResolveAssemblyReference.cache
-D:\Программирование\Hashsum_ListOfFile\Hashsum_ListOfFile\bin\Debug\Hash Sum Generator.exe.config
-D:\Программирование\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Debug\Hash Sum Generator.exe
-D:\Программирование\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Debug\Hash Sum Generator.pdb
-D:\Программирование\Hashsum_ListOfFile\Hashsum_ListOfFile\bin\Debug\Hash Sum Generator.exe
-D:\Программирование\Hashsum_ListOfFile\Hashsum_ListOfFile\bin\Debug\Hash Sum Generator.pdb
-D:\Программирование\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Debug\Hash_Sum_Generator.csprojResolveAssemblyReference.cache
-D:\Программирование\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Debug\Hash_Sum_Generator.Properties.Resources.resources
-D:\Программирование\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Debug\Hash_Sum_Generator.csproj.GenerateResource.Cache
-D:\Программирование\Hashsum_ListOfFile\Hashsum_ListOfFile\obj\x86\Debug\Hash_Sum_Generator.MainWindow.resources
 D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\bin\Debug\Hash Sum Generator.exe.config
-D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\obj\x86\Debug\Hash Sum Generator.exe
-D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\obj\x86\Debug\Hash Sum Generator.pdb
 D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\bin\Debug\Hash Sum Generator.exe
 D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\bin\Debug\Hash Sum Generator.pdb
-D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\obj\x86\Debug\Hash_Sum_Generator.csprojResolveAssemblyReference.cache
+D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\obj\x86\Debug\Hash_Sum_Generator.AboutWindow.resources
 D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\obj\x86\Debug\Hash_Sum_Generator.MainWindow.resources
 D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\obj\x86\Debug\Hash_Sum_Generator.Properties.Resources.resources
 D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\obj\x86\Debug\Hash_Sum_Generator.csproj.GenerateResource.Cache
-D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\obj\x86\Debug\Hash_Sum_Generator.AboutWindow.resources
+D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\obj\x86\Debug\Hash Sum Generator.exe
+D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\obj\x86\Debug\Hash Sum Generator.pdb
+D:\Программирование\Hash_Sum_Generator\Hash_Sum_Generator\obj\x86\Debug\Hash_Sum_Generator.csprojResolveAssemblyReference.cache

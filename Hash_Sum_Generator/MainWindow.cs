@@ -255,12 +255,13 @@ namespace Hash_Sum_Generator
         //        sendStream.Write(sentData, 0, sentData.Length);
         //        sendStream.Close();
         //    }
+        //      catch (ThreadAbortException)
+        //    {
+        //      throw;
+        //    }
         //    catch (Exception ex)
         //    {
-        //        if (ex.Message != "Поток находился в процессе прерывания.")
-        //            MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //        else
-        //            throw;
+        //        MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         //    }
         //}
 
@@ -298,6 +299,8 @@ namespace Hash_Sum_Generator
                     About_Button.Enabled = false;
                     ChooseHashAlgorithm.Enabled = false;
                     ChoosePath.Enabled = false;
+                    HashSum.Enabled = false;
+
                     AbortButton.Enabled = true;
 
                     progressBar1.Value = 0;
@@ -434,14 +437,12 @@ namespace Hash_Sum_Generator
                     //checkBoxPost.Enabled = true;
 
                     AbortButton.Enabled = false;
+
                     groupBoxSavedPath.Enabled = true;
                     About_Button.Enabled = true;
                     flowLayoutPanel.Enabled = true;
-                    
+                    HashSum.Enabled = true;
                     ChooseHashAlgorithm.Enabled = true;
-                    ChoosePath.Enabled = true;
-                    OpenTxt.Enabled = true;
-                    ClearFile.Enabled = true;
 
                     //if (checkBoxPost.Checked == true)
                     //{
@@ -459,12 +460,13 @@ namespace Hash_Sum_Generator
                     MessageBox.Show("Complete");
                 }));
             }
+            catch (ThreadAbortException)
+            {
+                throw;
+            }
             catch (Exception ex)
             {
-                if (ex.Message != "Поток находился в процессе прерывания.")
-                    MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                else
-                    throw;
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -734,15 +736,14 @@ namespace Hash_Sum_Generator
             Status.Text = "Status: Aborted";
 
             AbortButton.Enabled = false;
+
             groupBoxSavedPath.Enabled = true;
             About_Button.Enabled = true;
             flowLayoutPanel.Enabled = true;
             //UrlText.Enabled = true;
             //checkBoxPost.Enabled = true;
             ChooseHashAlgorithm.Enabled = true;
-            ChoosePath.Enabled = true;
-            OpenTxt.Enabled = true;
-            ClearFile.Enabled = true;
+            HashSum.Enabled = true;
 
             //if (checkBoxPost.Checked == true)
             //{
