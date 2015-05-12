@@ -304,7 +304,7 @@ namespace Hash_Sum_Generator
                     AbortButton.Enabled = true;
 
                     progressBar1.Value = 0;
-                    Count.Text = "Count of files: " + "0/" + Convert.ToString(stFiles.Length);
+                    Count.Text = "Number of files: " + "0/" + Convert.ToString(stFiles.Length);
                     progressBar1.Maximum = stFiles.Length;
                     Status.Text = "Status: Create array of files...";
                 }));
@@ -318,7 +318,7 @@ namespace Hash_Sum_Generator
                         Invoke((Action)(() =>
                         {
                             progressBar1.Value++;
-                            Count.Text = "Count of files: " + (i + 1) + "/" + Convert.ToString(stFiles.Length);
+                            Count.Text = "Number of files: " + (i + 1) + "/" + Convert.ToString(stFiles.Length);
                             File_Name.Text = "File:  " + stFilesFull[i];
                         }));
                     }
@@ -338,9 +338,9 @@ namespace Hash_Sum_Generator
 
                 Invoke((Action)(() =>
                 {
-                    Count.Text = "Count of files: " + "0/" + Convert.ToString(stFiles.Length);
+                    Count.Text = "Number of files: " + "0/" + Convert.ToString(stFiles.Length);
                     progressBar1.Value = 0;
-                    Status.Text = "Status: Generate hesh sum...";
+                    Status.Text = "Status: Generate hash sum...";
                 }));
 
                 StreamWriter HashWrite;
@@ -402,7 +402,7 @@ namespace Hash_Sum_Generator
                     Invoke((Action)(() =>
                     {
                         progressBar1.Value++;
-                        Count.Text = "Count of files: " + (i + 1) + "/" + Convert.ToString(stFiles.Length);
+                        Count.Text = "Number of files: " + (i + 1) + "/" + Convert.ToString(stFiles.Length);
                         File_Name.Text = "File:  " + stFilesFull[i];
                     }));
                 }
@@ -475,7 +475,7 @@ namespace Hash_Sum_Generator
             if (stPath != "")
             {
                 progressBar1.Value = 0;
-                Count.Text = "Count of files: 0/0";
+                Count.Text = "Number of files: 0/0";
                 Status.Text = "Status: ";
                 //Thread for calculate hash
                 Hash = new Thread(new ThreadStart(GenerateHash));
