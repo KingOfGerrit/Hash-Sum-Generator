@@ -148,6 +148,7 @@
             this.ChoosePath.Size = new System.Drawing.Size(127, 36);
             this.ChoosePath.TabIndex = 11;
             this.ChoosePath.TabStop = false;
+            this.ChoosePath.Text = "Path for";
             // 
             // FolderPath
             // 

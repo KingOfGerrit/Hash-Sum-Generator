@@ -433,6 +433,7 @@ namespace Hash_Sum_Generator
                 {
                     Status.Text = "Status: Complete";
 
+                    //Enable interface
                     //UrlText.Enabled = true;
                     //checkBoxPost.Enabled = true;
 
@@ -443,6 +444,7 @@ namespace Hash_Sum_Generator
                     flowLayoutPanel.Enabled = true;
                     HashSum.Enabled = true;
                     ChooseHashAlgorithm.Enabled = true;
+                    ChoosePath.Enabled = true;
 
                     //if (checkBoxPost.Checked == true)
                     //{
