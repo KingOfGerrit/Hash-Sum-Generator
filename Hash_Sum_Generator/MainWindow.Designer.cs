@@ -198,7 +198,7 @@
             this.ChooseRIPEMD160.TabIndex = 5;
             this.ChooseRIPEMD160.Text = "RIPEMD160";
             this.ChooseRIPEMD160.UseVisualStyleBackColor = true;
-            this.ChooseRIPEMD160.CheckedChanged += new System.EventHandler(this.ChooseRIPEMD160_CheckedChanged);
+            this.ChooseRIPEMD160.CheckedChanged += new System.EventHandler(this.ChooseAlgorithm_CheckedChanged);
             // 
             // ChooseSHA512
             // 
@@ -209,7 +209,7 @@
             this.ChooseSHA512.TabIndex = 4;
             this.ChooseSHA512.Text = "SHA512";
             this.ChooseSHA512.UseVisualStyleBackColor = true;
-            this.ChooseSHA512.CheckedChanged += new System.EventHandler(this.ChooseSHA512_CheckedChanged);
+            this.ChooseSHA512.CheckedChanged += new System.EventHandler(this.ChooseAlgorithm_CheckedChanged);
             // 
             // ChooseSHA384
             // 
@@ -220,7 +220,7 @@
             this.ChooseSHA384.TabIndex = 3;
             this.ChooseSHA384.Text = "SHA384";
             this.ChooseSHA384.UseVisualStyleBackColor = true;
-            this.ChooseSHA384.CheckedChanged += new System.EventHandler(this.ChooseSHA384_CheckedChanged);
+            this.ChooseSHA384.CheckedChanged += new System.EventHandler(this.ChooseAlgorithm_CheckedChanged);
             // 
             // ChooseSHA256
             // 
@@ -231,7 +231,7 @@
             this.ChooseSHA256.TabIndex = 2;
             this.ChooseSHA256.Text = "SHA256";
             this.ChooseSHA256.UseVisualStyleBackColor = true;
-            this.ChooseSHA256.CheckedChanged += new System.EventHandler(this.ChooseSHA256_CheckedChanged);
+            this.ChooseSHA256.CheckedChanged += new System.EventHandler(this.ChooseAlgorithm_CheckedChanged);
             // 
             // ChooseSHA1
             // 
@@ -242,7 +242,7 @@
             this.ChooseSHA1.TabIndex = 1;
             this.ChooseSHA1.Text = "SHA1";
             this.ChooseSHA1.UseVisualStyleBackColor = true;
-            this.ChooseSHA1.CheckedChanged += new System.EventHandler(this.ChooseSHA1_CheckedChanged);
+            this.ChooseSHA1.CheckedChanged += new System.EventHandler(this.ChooseAlgorithm_CheckedChanged);
             // 
             // ChooseMD5
             // 
@@ -255,7 +255,7 @@
             this.ChooseMD5.TabStop = true;
             this.ChooseMD5.Text = "MD5";
             this.ChooseMD5.UseVisualStyleBackColor = true;
-            this.ChooseMD5.CheckedChanged += new System.EventHandler(this.ChooseMD5_CheckedChanged);
+            this.ChooseMD5.CheckedChanged += new System.EventHandler(this.ChooseAlgorithm_CheckedChanged);
             // 
             // ChoosePathTxt
             // 

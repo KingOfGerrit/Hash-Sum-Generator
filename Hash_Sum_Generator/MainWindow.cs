@@ -19,7 +19,6 @@ namespace Hash_Sum_Generator
 
     public partial class MainWindow : Form
     {
-        
         private string stPath = Hash_Sum_Generator.Properties.Settings.Default.Path;
         private string stPathOfHashSumTxt = Hash_Sum_Generator.Properties.Settings.Default.PathForFileWithHashSum;
         private Thread Hash = null;
@@ -559,49 +558,61 @@ namespace Hash_Sum_Generator
         //    Hash_Sum_Generator.Properties.Settings.Default.Save();
         //}
 
-
-        private void ChooseMD5_CheckedChanged(object sender, EventArgs e)
+        private void ChooseAlgorithm_CheckedChanged(object sender, EventArgs e)
         {
-            Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "MD5";
+            Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = (((RadioButton)sender).Name).Replace("Choose", "");
             Hash_Sum_Generator.Properties.Settings.Default.Save();
         }
 
-        private void ChooseRIPEMD160_CheckedChanged(object sender, EventArgs e)
-        {
-            Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "RIPEMD160";
-            Hash_Sum_Generator.Properties.Settings.Default.Save();
-        }
+        //private void ChooseMD5_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "MD5";
+        //    Hash_Sum_Generator.Properties.Settings.Default.Save();
+        //}
 
-        private void ChooseSHA1_CheckedChanged(object sender, EventArgs e)
-        {
-            Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "SHA1";
-            Hash_Sum_Generator.Properties.Settings.Default.Save();
-        }
+        //private void ChooseRIPEMD160_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "RIPEMD160";
+        //    Hash_Sum_Generator.Properties.Settings.Default.Save();
+        //}
 
-        private void ChooseSHA256_CheckedChanged(object sender, EventArgs e)
-        {
-            Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "SHA256";
-            Hash_Sum_Generator.Properties.Settings.Default.Save();
-        }
+        //private void ChooseSHA1_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "SHA1";
+        //    Hash_Sum_Generator.Properties.Settings.Default.Save();
+        //}
 
-        private void ChooseSHA384_CheckedChanged(object sender, EventArgs e)
-        {
-            Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "SHA384";
-            Hash_Sum_Generator.Properties.Settings.Default.Save();
-        }
+        //private void ChooseSHA256_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "SHA256";
+        //    Hash_Sum_Generator.Properties.Settings.Default.Save();
+        //}
 
-        private void ChooseSHA512_CheckedChanged(object sender, EventArgs e)
-        {
-            Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "SHA512";
-            Hash_Sum_Generator.Properties.Settings.Default.Save();
-        }
+        //private void ChooseSHA384_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "SHA384";
+        //    Hash_Sum_Generator.Properties.Settings.Default.Save();
+        //}
+
+        //private void ChooseSHA512_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm = "SHA512";
+        //    Hash_Sum_Generator.Properties.Settings.Default.Save();
+        //}
         
 
         private void FilePath_CheckedChanged(object sender, EventArgs e)
         {
             if(FilePath.Checked == true)
             {
-                if (stPath.IndexOf(".") == -1)
+                FileAttributes attr = new FileAttributes();
+
+                if(stPath.Length != 0)
+                {
+                    attr = File.GetAttributes(@stPath);
+                }
+
+                if (!(attr.HasFlag(FileAttributes.Directory)))
                 {
                     stPath = "";
                     CurrentPath.Text = "Current path:  ";
@@ -617,7 +628,14 @@ namespace Hash_Sum_Generator
         {
             if (FolderPath.Checked == true)
             {
-                if (stPath.IndexOf(".") != -1)
+                FileAttributes attr = new FileAttributes();
+
+                if (stPath.Length != 0)
+                {
+                    attr = File.GetAttributes(@stPath);
+                }
+
+                if (attr.HasFlag(FileAttributes.Directory))
                 {
                     stPath = "";
                     CurrentPath.Text = "Current path:  ";
@@ -666,6 +684,8 @@ namespace Hash_Sum_Generator
                 else
                     SavedPathListBox.SelectedIndex = Hash_Sum_Generator.Properties.Settings.Default.Saved_Path.FindIndex(x => x.StartsWith(stTMPPath));
             }
+
+            string[] test = stPath.Split(new Char[] { '\\' });
         }
 
         private void Delete_Path_Click(object sender, EventArgs e)
@@ -701,15 +721,17 @@ namespace Hash_Sum_Generator
             {
                 if (SavedPathListBox.SelectedItem != null && SavedPathListBox.SelectedIndex != -1)
                 {
+                    FileAttributes attr = File.GetAttributes(@stPath);
+
                     stPath = Convert.ToString(SavedPathListBox.SelectedItem);
                     CurrentPath.Text = "Current path:  " + stPath;
                     Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
                     Hash_Sum_Generator.Properties.Settings.Default.Save();
 
-                    if (stPath.IndexOf(".") > 0)
-                        FilePath.Checked = true;
-                    else
+                    if (attr.HasFlag(FileAttributes.Directory))
                         FolderPath.Checked = true;
+                    else
+                        FilePath.Checked = true;
                 }
             }
             else
@@ -774,7 +796,5 @@ namespace Hash_Sum_Generator
             Thread t = new Thread(ts);
             t.Start();
         }
-
-        
     }
 }
