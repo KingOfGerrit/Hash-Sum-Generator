@@ -22,6 +22,7 @@ namespace Hash_Sum_Generator
         private string stPath = Hash_Sum_Generator.Properties.Settings.Default.Path;
         private string stPathOfHashSumTxt = Hash_Sum_Generator.Properties.Settings.Default.PathForFileWithHashSum;
         private Thread Hash = null;
+        private Thread TimerThread = null;
 
         public MainWindow()
         {
@@ -30,16 +31,16 @@ namespace Hash_Sum_Generator
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            if(Hash_Sum_Generator.Properties.Settings.Default.Saved_Path == null)
+            if (Hash_Sum_Generator.Properties.Settings.Default.Saved_Path == null)
                 Hash_Sum_Generator.Properties.Settings.Default.Saved_Path = new List<string>();
 
             if (Hash_Sum_Generator.Properties.Settings.Default.Saved_Path != null)
                 SavedPathListBox.Items.AddRange(Hash_Sum_Generator.Properties.Settings.Default.Saved_Path.ToArray());
             //SavedPathListBox.DataSource = Hash_Sum_Generator.Properties.Settings.Default.Saved_Path;
 
-            if (!(File.Exists(stPathOfHashSumTxt + "\\Hash Sums.txt")))
+            if (!(File.Exists(stPathOfHashSumTxt + "\\Hash.txt")))
             {
-                FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash.txt");
                 fs.Close();
             }
 
@@ -52,7 +53,7 @@ namespace Hash_Sum_Generator
             }
 
 
-            CurrentPathFileForHashSum.Text = "Hash Sum export file:  " + stPathOfHashSumTxt + "\\Hash Sum.txt";
+            CurrentPathFileForHashSum.Text = "Hash Sum export file:  " + stPathOfHashSumTxt + "\\Hash.txt";
 
             //UrlText.Text = Hash_Sum_Generator.Properties.Settings.Default.UrlText;
 
@@ -115,10 +116,10 @@ namespace Hash_Sum_Generator
             FolderBrowserDialog OPF = new FolderBrowserDialog();
             if (OPF.ShowDialog() == DialogResult.OK)
             {
-                File.Delete(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                File.Delete(stPathOfHashSumTxt + "\\Hash.txt");
                 stPathOfHashSumTxt = OPF.SelectedPath;
 
-                FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash.txt");
                 fs.Close();
 
                 CurrentPathFileForHashSum.Text = "Hash Sum export file:  " + stPathOfHashSumTxt + "\\Hash Sum.txt";
@@ -164,6 +165,20 @@ namespace Hash_Sum_Generator
                 Hash_Sum_Generator.Properties.Settings.Default.Save();
 
                 SavedPathListBox.SelectedIndex = -1;
+            }
+        }
+
+        public static byte[] streamReadFully(Stream input)
+        {
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
             }
         }
 
@@ -239,6 +254,28 @@ namespace Hash_Sum_Generator
             }
         }
 
+        //Timer
+        private void Timer()
+        {
+            int s = 0;
+            int m = 0;
+            while(true)
+            {
+                Thread.Sleep(1000);
+                s++;
+                if (s == 60)
+                {
+                    m++;
+                    s = 0;
+                }
+
+                Invoke((Action)(() =>
+                {
+                    TimePassed.Text = "Time passed: " + m + "m " + s + "s";
+                }));
+            }
+        }
+
         //Post on the site
         //private void POST(string Data, string Url)
         //{
@@ -269,9 +306,9 @@ namespace Hash_Sum_Generator
         {
             try
             {
-                if (!(File.Exists(stPathOfHashSumTxt + "\\Hash Sums.txt")))
+                if (!(File.Exists(stPathOfHashSumTxt + "\\Hash.txt")))
                 {
-                    FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                    FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash.txt");
                     fs.Close();
                 }
 
@@ -324,11 +361,11 @@ namespace Hash_Sum_Generator
                 }
 
                 /*
-                if (System.IO.File.Exists(stPathOfHashSumTxt + "\\Hash Sums.txt"))
+                if (System.IO.File.Exists(stPathOfHashSumTxt + "\\Hash.txt"))
                 {
-                    string s = File.ReadAllText(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                    string s = File.ReadAllText(stPathOfHashSumTxt + "\\Hash.txt");
                     s = s.Remove(0, s.Length);
-                    File.WriteAllText(stPathOfHashSumTxt + "\\Hash Sums.txt", s);
+                    File.WriteAllText(stPathOfHashSumTxt + "\\Hash.txt", s);
                 }
                 */
 
@@ -344,14 +381,18 @@ namespace Hash_Sum_Generator
 
                 StreamWriter HashWrite;
 
-                FileInfo file = new FileInfo(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                FileInfo file = new FileInfo(stPathOfHashSumTxt + "\\Hash.txt");
 
-                if ((File.ReadAllLines(stPathOfHashSumTxt + "\\Hash Sums.txt")).Length != 0)
+                if ((File.ReadAllLines(stPathOfHashSumTxt + "\\Hash.txt")).Length != 0 && File.ReadLines(stPathOfHashSumTxt + "\\Hash.txt").Last() != "\n")
                 {
                     HashWrite = file.AppendText();
                     HashWrite.WriteLine("\n");
                     HashWrite.Close();
                 }
+
+                TimerThread = new Thread(new ThreadStart(Timer));
+                TimerThread.IsBackground = true;
+                TimerThread.Start();
 
                 for (Int32 i = 0; i < stFiles.Length; i++)
                 {
@@ -383,19 +424,6 @@ namespace Hash_Sum_Generator
                             break;
                     }
 
-                    //if (ChooseMD5.Checked == true)
-                    //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeMD5Checksum(stFilesFull[i]));
-                    //else if (ChooseSHA1.Checked == true)
-                    //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA1Checksum(stFilesFull[i]));
-                    //else if (ChooseSHA256.Checked == true)
-                    //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA256Checksum(stFilesFull[i]));
-                    //else if (ChooseSHA384.Checked == true)
-                    //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA384Checksum(stFilesFull[i]));
-                    //else if (ChooseSHA512.Checked == true)
-                    //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeSHA512Checksum(stFilesFull[i]));
-                    //else if (ChooseRIPEMD160.Checked == true)
-                    //    HashWrite.WriteLine(stFiles[i] + "\t" + ComputeRIPEMD160Checksum(stFilesFull[i]));
-
                     HashWrite.Close();
 
                     Invoke((Action)(() =>
@@ -405,6 +433,8 @@ namespace Hash_Sum_Generator
                         File_Name.Text = "File:  " + stFilesFull[i];
                     }));
                 }
+
+                TimerThread.Abort();
 
                 //} 
                 //else
@@ -491,21 +521,21 @@ namespace Hash_Sum_Generator
 
         private void OpenTxt_Click(object sender, EventArgs e)
         {
-            if (File.Exists(stPathOfHashSumTxt + "\\Hash Sums.txt"))
+            if (File.Exists(stPathOfHashSumTxt + "\\Hash.txt"))
             {
                 Process proc = new Process();
                 proc.StartInfo.UseShellExecute = true;
-                proc.StartInfo.FileName = stPathOfHashSumTxt + "\\Hash Sums.txt";
+                proc.StartInfo.FileName = stPathOfHashSumTxt + "\\Hash.txt";
                 proc.Start();
             }
             else
             {
-                FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash.txt");
                 fs.Close();
 
                 Process proc = new Process();
                 proc.StartInfo.UseShellExecute = true;
-                proc.StartInfo.FileName = stPathOfHashSumTxt + "\\Hash Sums.txt";
+                proc.StartInfo.FileName = stPathOfHashSumTxt + "\\Hash.txt";
                 proc.Start();
             }
         }
@@ -515,20 +545,20 @@ namespace Hash_Sum_Generator
             DialogResult result = MessageBox.Show("Are you sure you want to clear file???", "", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                if (File.Exists(stPathOfHashSumTxt + "\\Hash Sums.txt"))
+                if (File.Exists(stPathOfHashSumTxt + "\\Hash.txt"))
                 {
-                    string s = File.ReadAllText(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                    string s = File.ReadAllText(stPathOfHashSumTxt + "\\Hash.txt");
                     s = s.Remove(0, s.Length);
-                    File.WriteAllText(stPathOfHashSumTxt + "\\Hash Sums.txt", s);
+                    File.WriteAllText(stPathOfHashSumTxt + "\\Hash.txt", s);
                 }
                 else
                 {
-                    FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                    FileStream fs = File.Create(stPathOfHashSumTxt + "\\Hash.txt");
                     fs.Close();
 
-                    string s = File.ReadAllText(stPathOfHashSumTxt + "\\Hash Sums.txt");
+                    string s = File.ReadAllText(stPathOfHashSumTxt + "\\Hash.txt");
                     s = s.Remove(0, s.Length);
-                    File.WriteAllText(stPathOfHashSumTxt + "\\Hash Sums.txt", s);
+                    File.WriteAllText(stPathOfHashSumTxt + "\\Hash.txt", s);
                 }
             }
         }
@@ -605,19 +635,15 @@ namespace Hash_Sum_Generator
         {
             if(FilePath.Checked == true)
             {
-                FileAttributes attr = new FileAttributes();
-
                 if(stPath.Length != 0)
                 {
-                    attr = File.GetAttributes(@stPath);
-                }
-
-                if (!(attr.HasFlag(FileAttributes.Directory)))
-                {
-                    stPath = "";
-                    CurrentPath.Text = "Current path:  ";
-                    Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
-                    Hash_Sum_Generator.Properties.Settings.Default.Save();
+                    if (File.GetAttributes(@stPath) == System.IO.FileAttributes.Directory)
+                    {
+                        stPath = "";
+                        CurrentPath.Text = "Current path:  ";
+                        Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                        Hash_Sum_Generator.Properties.Settings.Default.Save();
+                    }
                 }
                 Hash_Sum_Generator.Properties.Settings.Default.File_or_Folder = "File";
                 Hash_Sum_Generator.Properties.Settings.Default.Save();
@@ -628,19 +654,15 @@ namespace Hash_Sum_Generator
         {
             if (FolderPath.Checked == true)
             {
-                FileAttributes attr = new FileAttributes();
-
                 if (stPath.Length != 0)
                 {
-                    attr = File.GetAttributes(@stPath);
-                }
-
-                if (attr.HasFlag(FileAttributes.Directory))
-                {
-                    stPath = "";
-                    CurrentPath.Text = "Current path:  ";
-                    Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
-                    Hash_Sum_Generator.Properties.Settings.Default.Save();
+                    if (!(File.GetAttributes(@stPath) == System.IO.FileAttributes.Directory))
+                    {
+                        stPath = "";
+                        CurrentPath.Text = "Current path:  ";
+                        Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                        Hash_Sum_Generator.Properties.Settings.Default.Save();
+                    }
                 }
                 Hash_Sum_Generator.Properties.Settings.Default.File_or_Folder = "Folder";
                 Hash_Sum_Generator.Properties.Settings.Default.Save();
@@ -756,6 +778,7 @@ namespace Hash_Sum_Generator
 
         private void AbortButton_Click(object sender, EventArgs e)
         {
+            TimerThread.Abort();
             Hash.Abort();
             Status.Text = "Status: Aborted";
 

@@ -58,6 +58,7 @@
             this.Delete_All = new System.Windows.Forms.Button();
             this.groupBoxSavedPath = new System.Windows.Forms.GroupBox();
             this.AbortButton = new System.Windows.Forms.Button();
+            this.TimePassed = new System.Windows.Forms.Label();
             this.ChoosePath.SuspendLayout();
             this.ChooseHashAlgorithm.SuspendLayout();
             this.flowLayoutPanel.SuspendLayout();
@@ -67,7 +68,7 @@
             // HashSum
             // 
             this.HashSum.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.HashSum.Location = new System.Drawing.Point(292, 204);
+            this.HashSum.Location = new System.Drawing.Point(321, 202);
             this.HashSum.Name = "HashSum";
             this.HashSum.Size = new System.Drawing.Size(350, 33);
             this.HashSum.TabIndex = 0;
@@ -109,7 +110,7 @@
             // 
             this.progressBar1.Location = new System.Drawing.Point(12, 238);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(711, 25);
+            this.progressBar1.Size = new System.Drawing.Size(740, 25);
             this.progressBar1.TabIndex = 4;
             // 
             // Status
@@ -124,7 +125,7 @@
             // Count
             // 
             this.Count.AutoSize = true;
-            this.Count.Location = new System.Drawing.Point(572, 266);
+            this.Count.Location = new System.Drawing.Point(593, 266);
             this.Count.Name = "Count";
             this.Count.Size = new System.Drawing.Size(100, 13);
             this.Count.TabIndex = 6;
@@ -145,7 +146,7 @@
             this.ChoosePath.Controls.Add(this.FilePath);
             this.ChoosePath.Location = new System.Drawing.Point(159, 41);
             this.ChoosePath.Name = "ChoosePath";
-            this.ChoosePath.Size = new System.Drawing.Size(127, 36);
+            this.ChoosePath.Size = new System.Drawing.Size(156, 36);
             this.ChoosePath.TabIndex = 11;
             this.ChoosePath.TabStop = false;
             this.ChoosePath.Text = "Path for";
@@ -153,7 +154,7 @@
             // FolderPath
             // 
             this.FolderPath.AutoSize = true;
-            this.FolderPath.Location = new System.Drawing.Point(67, 13);
+            this.FolderPath.Location = new System.Drawing.Point(96, 13);
             this.FolderPath.Name = "FolderPath";
             this.FolderPath.Size = new System.Drawing.Size(54, 17);
             this.FolderPath.TabIndex = 1;
@@ -184,7 +185,7 @@
             this.ChooseHashAlgorithm.Controls.Add(this.ChooseMD5);
             this.ChooseHashAlgorithm.Location = new System.Drawing.Point(159, 77);
             this.ChooseHashAlgorithm.Name = "ChooseHashAlgorithm";
-            this.ChooseHashAlgorithm.Size = new System.Drawing.Size(127, 155);
+            this.ChooseHashAlgorithm.Size = new System.Drawing.Size(156, 155);
             this.ChooseHashAlgorithm.TabIndex = 12;
             this.ChooseHashAlgorithm.TabStop = false;
             this.ChooseHashAlgorithm.Text = "Algorithms";
@@ -354,7 +355,7 @@
             this.groupBoxSavedPath.Controls.Add(this.Delete_All);
             this.groupBoxSavedPath.Controls.Add(this.Add_Path);
             this.groupBoxSavedPath.Controls.Add(this.Delete_Path);
-            this.groupBoxSavedPath.Location = new System.Drawing.Point(292, 43);
+            this.groupBoxSavedPath.Location = new System.Drawing.Point(321, 41);
             this.groupBoxSavedPath.Name = "groupBoxSavedPath";
             this.groupBoxSavedPath.Size = new System.Drawing.Size(431, 160);
             this.groupBoxSavedPath.TabIndex = 22;
@@ -365,7 +366,7 @@
             // 
             this.AbortButton.Enabled = false;
             this.AbortButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.AbortButton.Location = new System.Drawing.Point(648, 204);
+            this.AbortButton.Location = new System.Drawing.Point(677, 202);
             this.AbortButton.Name = "AbortButton";
             this.AbortButton.Size = new System.Drawing.Size(75, 33);
             this.AbortButton.TabIndex = 24;
@@ -373,11 +374,21 @@
             this.AbortButton.UseVisualStyleBackColor = true;
             this.AbortButton.Click += new System.EventHandler(this.AbortButton_Click);
             // 
+            // TimePassed
+            // 
+            this.TimePassed.AutoSize = true;
+            this.TimePassed.Location = new System.Drawing.Point(354, 266);
+            this.TimePassed.Name = "TimePassed";
+            this.TimePassed.Size = new System.Drawing.Size(113, 13);
+            this.TimePassed.TabIndex = 25;
+            this.TimePassed.Text = "Time passed: 00m 00s";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(735, 311);
+            this.ClientSize = new System.Drawing.Size(764, 311);
+            this.Controls.Add(this.TimePassed);
             this.Controls.Add(this.AbortButton);
             this.Controls.Add(this.HashSum);
             this.Controls.Add(this.groupBoxSavedPath);
@@ -425,10 +436,10 @@
         private System.Windows.Forms.RadioButton FolderPath;
         private System.Windows.Forms.RadioButton FilePath;
         private System.Windows.Forms.GroupBox ChooseHashAlgorithm;
-        private System.Windows.Forms.RadioButton ChooseSHA1;
         private System.Windows.Forms.RadioButton ChooseMD5;
-        private System.Windows.Forms.RadioButton ChooseSHA384;
+        private System.Windows.Forms.RadioButton ChooseSHA1;
         private System.Windows.Forms.RadioButton ChooseSHA256;
+        private System.Windows.Forms.RadioButton ChooseSHA384;
         private System.Windows.Forms.RadioButton ChooseSHA512;
         private System.Windows.Forms.RadioButton ChooseRIPEMD160;
         public System.Windows.Forms.Button ChoosePathTxt;
@@ -442,6 +453,8 @@
         private System.Windows.Forms.GroupBox groupBoxSavedPath;
         private System.Windows.Forms.Button About_Button;
         private System.Windows.Forms.Button AbortButton;
+
+        public System.Windows.Forms.Label TimePassed;
     }
 }
 
