@@ -720,7 +720,7 @@ namespace Hash_Sum_Generator
 
                 Hash_Sum_Generator.Properties.Settings.Default.Save();
 
-                SavedPathListBox.SelectedIndex = SavedPathListBox.Items.Count - 1;
+                SavedPathListBox.SelectedIndex = -1;
             }
             
         }
@@ -743,14 +743,12 @@ namespace Hash_Sum_Generator
             {
                 if (SavedPathListBox.SelectedItem != null && SavedPathListBox.SelectedIndex != -1)
                 {
-                    FileAttributes attr = File.GetAttributes(@stPath);
-
                     stPath = Convert.ToString(SavedPathListBox.SelectedItem);
                     CurrentPath.Text = "Current path:  " + stPath;
                     Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
                     Hash_Sum_Generator.Properties.Settings.Default.Save();
 
-                    if (attr.HasFlag(FileAttributes.Directory))
+                    if (File.GetAttributes(@stPath) == System.IO.FileAttributes.Directory)
                         FolderPath.Checked = true;
                     else
                         FilePath.Checked = true;
