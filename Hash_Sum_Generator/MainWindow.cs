@@ -317,13 +317,13 @@ namespace Hash_Sum_Generator
             
                 if (FolderPath.Checked == true)
                 {
-                    stFiles = Directory.GetFiles(stPath, "*.*", SearchOption.AllDirectories);
-                    stFilesFull = Directory.GetFiles(stPath, "*.*", SearchOption.AllDirectories);
+                    stFiles = Directory.GetFiles(@stPath, "*.*", SearchOption.AllDirectories);
+                    stFilesFull = Directory.GetFiles(@stPath, "*.*", SearchOption.AllDirectories);
                 }
                 else
                 {
-                    stFiles[0] = stPath;
-                    stFilesFull[0] = stPath;
+                    stFiles[0] = @stPath;
+                    stFilesFull[0] = @stPath;
                 }
             
 
@@ -398,6 +398,9 @@ namespace Hash_Sum_Generator
                 {
 
                     HashWrite = file.AppendText();
+
+                    if (File.Exists(stFilesFull[i]))
+                        File.SetAttributes(stFilesFull[i], FileAttributes.Normal);
 
                     switch (Hash_Sum_Generator.Properties.Settings.Default.HashAlgorithm)
                     {
@@ -641,7 +644,7 @@ namespace Hash_Sum_Generator
                     {
                         stPath = "";
                         CurrentPath.Text = "Current path:  ";
-                        Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                        Hash_Sum_Generator.Properties.Settings.Default.Path = @stPath;
                         Hash_Sum_Generator.Properties.Settings.Default.Save();
                     }
                 }
@@ -660,7 +663,7 @@ namespace Hash_Sum_Generator
                     {
                         stPath = "";
                         CurrentPath.Text = "Current path:  ";
-                        Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                        Hash_Sum_Generator.Properties.Settings.Default.Path = @stPath;
                         Hash_Sum_Generator.Properties.Settings.Default.Save();
                     }
                 }
@@ -680,7 +683,7 @@ namespace Hash_Sum_Generator
                     SavedPathListBox.Items.Add(stTMPPath);
                     stPath = Convert.ToString(SavedPathListBox.Items[SavedPathListBox.Items.Count - 1]);
                     CurrentPath.Text = "Current path:  " + stPath;
-                    Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.Path = @stPath;
                     Hash_Sum_Generator.Properties.Settings.Default.Saved_Path = SavedPathListBox.Items.OfType<string>().ToList();
                     Hash_Sum_Generator.Properties.Settings.Default.Save();
 
@@ -697,7 +700,7 @@ namespace Hash_Sum_Generator
                     SavedPathListBox.Items.Add(stTMPPath);
                     stPath = Convert.ToString(SavedPathListBox.Items[SavedPathListBox.Items.Count - 1]);
                     CurrentPath.Text = "Current path:  " + stPath;
-                    Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.Path = @stPath;
                     Hash_Sum_Generator.Properties.Settings.Default.Saved_Path = SavedPathListBox.Items.OfType<string>().ToList();
                     Hash_Sum_Generator.Properties.Settings.Default.Save();
 
@@ -745,7 +748,7 @@ namespace Hash_Sum_Generator
                 {
                     stPath = Convert.ToString(SavedPathListBox.SelectedItem);
                     CurrentPath.Text = "Current path:  " + stPath;
-                    Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.Path = @stPath;
                     Hash_Sum_Generator.Properties.Settings.Default.Save();
 
                     if (File.GetAttributes(@stPath) == System.IO.FileAttributes.Directory)
@@ -758,7 +761,7 @@ namespace Hash_Sum_Generator
             {
                 stPath = "";
                 CurrentPath.Text = "Current path:  ";
-                Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                Hash_Sum_Generator.Properties.Settings.Default.Path = @stPath;
                 Hash_Sum_Generator.Properties.Settings.Default.Save();
             }
             
