@@ -33,10 +33,25 @@ namespace Hash_Sum_Generator
         {
             if (Hash_Sum_Generator.Properties.Settings.Default.Saved_Path == null)
                 Hash_Sum_Generator.Properties.Settings.Default.Saved_Path = new List<string>();
+            
+            //SavedPathListBox.DataSource = Hash_Sum_Generator.Properties.Settings.Default.Saved_Path;
+
+            if(!File.Exists(stPath))
+            {
+                stPath = string.Empty;
+                Hash_Sum_Generator.Properties.Settings.Default.Path = string.Empty;
+            }
+
+            for (int i = 0; i < Hash_Sum_Generator.Properties.Settings.Default.Saved_Path.Count; i++)
+            {
+                if (!File.Exists(Hash_Sum_Generator.Properties.Settings.Default.Saved_Path[i].ToString()))
+                    Hash_Sum_Generator.Properties.Settings.Default.Saved_Path.Remove(Hash_Sum_Generator.Properties.Settings.Default.Saved_Path[i]);
+            }
 
             if (Hash_Sum_Generator.Properties.Settings.Default.Saved_Path != null)
                 SavedPathListBox.Items.AddRange(Hash_Sum_Generator.Properties.Settings.Default.Saved_Path.ToArray());
-            //SavedPathListBox.DataSource = Hash_Sum_Generator.Properties.Settings.Default.Saved_Path;
+
+            Hash_Sum_Generator.Properties.Settings.Default.Save();
 
             if (!(File.Exists(stPathOfHashSumTxt + "\\Hash.txt")))
             {
@@ -168,20 +183,6 @@ namespace Hash_Sum_Generator
             }
         }
 
-        public static byte[] streamReadFully(Stream input)
-        {
-            byte[] buffer = new byte[16 * 1024];
-            using (MemoryStream ms = new MemoryStream())
-            {
-                int read;
-                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    ms.Write(buffer, 0, read);
-                }
-                return ms.ToArray();
-            }
-        }
-
         //MD5
         public string ComputeMD5Checksum(string path)
         {
@@ -302,6 +303,7 @@ namespace Hash_Sum_Generator
         //}
 
         //Main function
+
         public void GenerateHash()
         {
             try
@@ -383,10 +385,10 @@ namespace Hash_Sum_Generator
 
                 FileInfo file = new FileInfo(stPathOfHashSumTxt + "\\Hash.txt");
 
-                if ((File.ReadAllLines(stPathOfHashSumTxt + "\\Hash.txt")).Length != 0 && File.ReadLines(stPathOfHashSumTxt + "\\Hash.txt").Last() != "\n")
+                if ((File.ReadAllLines(stPathOfHashSumTxt + "\\Hash.txt")).Length != 0)
                 {
                     HashWrite = file.AppendText();
-                    HashWrite.WriteLine("\n");
+                    HashWrite.Write('\n');
                     HashWrite.Close();
                 }
 
@@ -496,10 +498,45 @@ namespace Hash_Sum_Generator
             }
             catch (ThreadAbortException)
             {
+                TimerThread.Abort();
                 throw;
             }
             catch (Exception ex)
             {
+                TimerThread.Abort();
+
+                Invoke((Action)(() =>
+                {
+                    Status.Text = "Status: Error";
+
+                    //Enable interface
+
+                    //UrlText.Enabled = true;
+                    //checkBoxPost.Enabled = true;
+
+                    AbortButton.Enabled = false;
+
+                    groupBoxSavedPath.Enabled = true;
+                    About_Button.Enabled = true;
+                    flowLayoutPanel.Enabled = true;
+                    HashSum.Enabled = true;
+                    ChooseHashAlgorithm.Enabled = true;
+                    ChoosePath.Enabled = true;
+
+                    //if (checkBoxPost.Checked == true)
+                    //{
+                    //    OpenTxt.Enabled = false;
+                    //    ClearFile.Enabled = false;
+                    //    UrlText.Enabled = true;
+                    //}
+                    //else
+                    //{
+                    //    OpenTxt.Enabled = true;
+                    //    ClearFile.Enabled = true;
+                    //    UrlText.Enabled = false;
+                    //}
+                }));
+
                 MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -636,39 +673,62 @@ namespace Hash_Sum_Generator
 
         private void FilePath_CheckedChanged(object sender, EventArgs e)
         {
-            if(FilePath.Checked == true)
+            if (FilePath.Checked == true)
             {
-                if(stPath.Length != 0)
+                if (File.Exists(stPath))
                 {
-                    if (File.GetAttributes(@stPath) == System.IO.FileAttributes.Directory)
+                    if (stPath.Length != 0)
                     {
-                        stPath = "";
-                        CurrentPath.Text = "Current path:  ";
-                        Hash_Sum_Generator.Properties.Settings.Default.Path = @stPath;
-                        Hash_Sum_Generator.Properties.Settings.Default.Save();
+                        if (File.GetAttributes(stPath) == System.IO.FileAttributes.Directory)
+                        {
+                            stPath = "";
+                            CurrentPath.Text = "Current path:  ";
+                            Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                            Hash_Sum_Generator.Properties.Settings.Default.Save();
+                        }
                     }
+                    Hash_Sum_Generator.Properties.Settings.Default.File_or_Folder = "File";
+                    Hash_Sum_Generator.Properties.Settings.Default.Save();
                 }
-                Hash_Sum_Generator.Properties.Settings.Default.File_or_Folder = "File";
-                Hash_Sum_Generator.Properties.Settings.Default.Save();
+                else
+                {
+                    stPath = "";
+                    CurrentPath.Text = "Current path:  ";
+                    Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.File_or_Folder = "File";
+                    Hash_Sum_Generator.Properties.Settings.Default.Save();
+                }
             }
+            
         }
 
         private void FolderPath_CheckedChanged(object sender, EventArgs e)
         {
             if (FolderPath.Checked == true)
             {
-                if (stPath.Length != 0)
+                if (File.Exists(stPath))
                 {
-                    if (!(File.GetAttributes(@stPath) == System.IO.FileAttributes.Directory))
+                    if (stPath.Length != 0)
                     {
-                        stPath = "";
-                        CurrentPath.Text = "Current path:  ";
-                        Hash_Sum_Generator.Properties.Settings.Default.Path = @stPath;
-                        Hash_Sum_Generator.Properties.Settings.Default.Save();
+                        if (!(File.GetAttributes(stPath) == System.IO.FileAttributes.Directory))
+                        {
+                            stPath = "";
+                            CurrentPath.Text = "Current path:  ";
+                            Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                            Hash_Sum_Generator.Properties.Settings.Default.Save();
+                        }
                     }
+                    Hash_Sum_Generator.Properties.Settings.Default.File_or_Folder = "Folder";
+                    Hash_Sum_Generator.Properties.Settings.Default.Save();
                 }
-                Hash_Sum_Generator.Properties.Settings.Default.File_or_Folder = "Folder";
-                Hash_Sum_Generator.Properties.Settings.Default.Save();
+                else
+                {
+                    stPath = "";
+                    CurrentPath.Text = "Current path:  ";
+                    Hash_Sum_Generator.Properties.Settings.Default.Path = stPath;
+                    Hash_Sum_Generator.Properties.Settings.Default.File_or_Folder = "Folder";
+                    Hash_Sum_Generator.Properties.Settings.Default.Save();
+                }
             }
         }
 
